@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Affine and Jacobian (x, w) Coordinates - Double-Odd Elliptic Curves</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html" class="active"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">5.</strong> Implementations</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Double-Odd Elliptic Curves</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#affine-and-jacobian-x-w-coordinates" id="affine-and-jacobian-x-w-coordinates">Affine and Jacobian (x, w) Coordinates</a></h1>
+<p>In \((x, w)\) coordinates, the curve equation becomes:
+\[ w^2 x = x^2 + ax + b \]
+The neutral \(N\) does not have a defined affine \(w\) coordinate.
+For points in \(\mathbb{G}\) other than \(N\), the \(w\)
+coordinates is non-zero.</p>
+<h2><a class="header" href="#encoding-and-decoding" id="encoding-and-decoding">Encoding and Decoding</a></h2>
+<p>Encoding of \((x, w)\) is a simple encoding of the \(w\) coordinate.</p>
+<p>Decoding proceeds as follows:</p>
+<ul>
+<li>
+<p>If \(w = 0\), then return the point \(N\).</p>
+</li>
+<li>
+<p>Solve for \(x\) the equation \(x^2 - (w^2 - a)x + b = 0\):</p>
+<ul>
+<li>Compute \(\Delta = (w^2 - a)^2 - 4b\) (which is necessarily
+non-zero).</li>
+<li>If \(\Delta\) is not a quadratic residue, then there is no
+solution (the provided encoding is invalid). Otherwise, there
+are two solutions for \(x\), depending on which square root
+of \(\Delta\) is used:
+\[ x = \frac{w^2 - a \pm \sqrt{\Delta}}{2} \]</li>
+<li>Exactly one of the two solutions is a quadratic residue;
+use the other one.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#affine-coordinates" id="affine-coordinates">Affine Coordinates</a></h2>
+<p>Given points \(P_1 = (x_1, w_1)\) and \(P_2 = (x_2, w_2)\) in
+\(\mathbb{G}\), their sum in the group \(P_3 = (x_3, w_3) = P_1 +
+P_2\) is computed with:
+\[\begin{eqnarray*}
+x_3 &amp;=&amp; \frac{b x_1 x_2 (w_1 + w_2)^2}{(x_1 x_2 - b)^2} \\
+w_3 &amp;=&amp; -\frac{(w_1 w_2 + a)(x_1 x_2 + b) + 2b(x_1 + x_2)}{(w_1 + w_2)(x_1 x_2 - b)}
+\end{eqnarray*}\]</p>
+<p>These formulas are unified: they work properly for all points except when
+\(P_1\), \(P_2\) or \(P_3\) is the neutral \(N\).</p>
+<p>Specialized doubling formulas, to compute the double \((x', w')\) of
+the point \((x, w)\):
+\[\begin{eqnarray*}
+x' &amp;=&amp; \frac{4bw^2}{(2x + a - w^2)^2} \\
+w' &amp;=&amp; - \frac{w^4 + (4b-a^2)}{2w(2x + a - w^2)}
+\end{eqnarray*}\]</p>
+<p>Again, these formulas are only unified, since \(N\) does not have a
+defined \(w\) coordinate. Note that if the input point \(P\) is
+not \(N\), then its double \(2P\) is not \(N\) either, since
+the group \(\mathbb{G}\) has odd order \(r\).</p>
+<h2><a class="header" href="#jacobian-coordinates" id="jacobian-coordinates">Jacobian Coordinates</a></h2>
+<p>Jacobian coordinates represent point \((x, w)\) as the triplet
+\((X{:}W{:}Z)\) with \(x = X/Z^2\) and \(w = W/Z\). The
+point \(N\) is represented by \((0{:}W{:}0)\) for any \(W \neq 0\).
+Jacobian coordinates correspond to an isomorphism between curve
+\(E(a, b)\) and curve \(E(aZ^2, bZ^4)\).</p>
+<p>The addition of \(P_1 = (X_1{:}W_1{:}Z_1)\) with \(P_2 =
+(X_2{:}W_2{:}Z_2)\) into \(P_3 = (X_3{:}W_3{:}Z_3)\) is obtained with
+the following:
+\[\begin{eqnarray*}
+X_3 &amp;=&amp; b X_1 X_2 (W_1 Z_2 + W_2 Z_1)^4 \\
+W_3 &amp;=&amp; -((W_1 W_2 + a Z_1 Z_2)(X_1 X_2 + b Z_1^2 Z_2^2)
++ 2b Z_1 Z_2 (X_1 Z_2^2 + X_2 Z_1^2)) \\
+Z_3 &amp;=&amp; (X_1 X_2 -b Z_1^2 Z_2^2)(W_1 Z_2 + W_2 Z_1)
+\end{eqnarray*}\]
+These formulas can be computed with cost 8M+6S. If using
+Chudnovsky coordinates \((X{:}W{:}Z{:}Z^2)\) (i.e. we also keep around
+the value \(Z^2\) in addition to \(Z\)), then cost is lowered to
+8M+5S, but in-memory representation is larger.</p>
+<p>Addition formulas are unified, because they do not compute the correct
+result when one or both of the operands are equal to \(N\). However,
+if \(P_1 \neq N\) and \(P_2 = -P_1\), then a valid representation of
+\(N\) is computed. Thus, the only exceptional cases that must be
+handled in an implementation are \(P_1 = N\) and \(P_2 = N\). These
+two cases can be handled inexpensively with a couple of conditional
+copies, to obtain a complete <em>routine</em> which induces no tension between
+security and performance.</p>
+<p>For doubling point \((X{:}W{:}Z)\) into \((X'{:}W'{:}Z')\), formulas
+are:
+\[\begin{eqnarray*}
+X' &amp;=&amp; 16bW^4 Z^4 \\
+W' &amp;=&amp; -(W^4 + (4b-a^2)Z^4) \\
+Z' &amp;=&amp; 2WZ(2X + aZ^2 - W^2)
+\end{eqnarray*}\]
+These formulas are <em>complete</em>: they work properly for all inputs, including
+the neutral element \(N\).</p>
+<p>Generic implementation of point doubling is easily done in cost 2M+5S.
+If the base field is such that \(q = 3\bmod 4\), then \(4b - a^2\)
+is a square, and, provided that we have \(e = \sqrt{4b - a^2}\) and
+that the constant \(e\) is small, then we can compute \(W'\) as
+\((e/2)(2WZ)^2 - (Z^2 + eW^2)^2\), which leads to an implementation in
+cost 1M+6S.</p>
+<p>More interestingly, if parameters are such that \(-a\) is a square,
+and that \(2b = a^2\), then we can obtain an implementation of
+doubling in cost 2M+4S. Analysis shows that such a situation can happen
+only if \(q = 3\bmod 8\), and there will be a single curve (up to
+isomorphism) that matches these conditions; we can thus assume that
+the curve parameters are \(a = -1\) and \(b = 1/2\). In that case,
+the point doubling algorithm becomes the following:</p>
+<ol>
+<li>\(t_1 \leftarrow WZ\)</li>
+<li>\(t_2 \leftarrow t_1^2\)</li>
+<li>\(X' \leftarrow 8 t_2^2\)</li>
+<li>\(t_3 \leftarrow (W + Z)^2 - 2t_1\)</li>
+<li>\(W' \leftarrow 2t_2 - t_3^2\)</li>
+<li>\(Z' \leftarrow 2t_1 (2X - t_3)\)</li>
+</ol>
+<p>Successive doublings rely on the definition of some isogenies:
+\[\begin{eqnarray*}
+\psi_\pi : E(a, b) &amp;\longrightarrow&amp; E(-2a\pi^2, \pi^4(a^2-4b))[r] \\
+(x, w) &amp;\longmapsto&amp; \left(\pi^2 w^2, -\frac{\pi (x - b/x)}{w}\right)
+\end{eqnarray*}\]
+for a constant \(\pi \neq 0\) (and defining that the image of the
+point-at-infinity and the image of \(N\) are both the
+point-at-infinity in the target curve). These functions are isogenies on
+the curves (that is, using classic point addition) and the image is the
+subgroup of points of \(r\)-torsion in the destination curve. If two
+constants \(\pi\) and \(\pi'\) are such that \(2\pi\pi' = 1\),
+then for any \(P \in E(a, b)\), \(\psi_{\pi'}(\psi_{\pi}(P)) = 2P\).
+In other words, composing the two isogenies brings us back to the
+original curve, and together they compute a point doubling (on the
+curve).</p>
+<p>To obtain a similar effect with our group \(\mathbb{G}\), we also
+define the following functions:
+\[\begin{eqnarray*}
+\theta_\pi : E(a, b) &amp;\longrightarrow&amp; \mathbb{G}(-2a\pi^2, \pi^4(a^2-4b)) \\
+(x, w) &amp;\longmapsto&amp; \left(\frac{\pi^2(a^2-4b)}{w^2}, \frac{\pi (x - b/x)}{w}\right)
+\end{eqnarray*}\]
+using the notation that \(\mathbb{G}(a, b)\) is our prime order group,
+defined over a base double-odd elliptic curve with parameters \(a\)
+and \(b\). With these functions, we get that both
+\(\theta_{1/2}(\psi_1(P))\) and \(\theta_{1/2}(\theta_1(P))\)
+compute the double (in \(\mathbb{G}\)) of point \(P\).</p>
+<p>We can then compute a succession of doublings by a sequence of
+invocations of these functions, freely switching between \(\psi\) and
+\(\theta\) as best suits computations, in order to minimize cost. This
+yields complete formulas; the neutral \(N\) is represented by
+\((0{:}W{:}0)\) for any \(W \neq 0\), and the point-at-infinity
+(which will appear whenever applying a \(\psi\) function on the neutral
+\(N\)) is represented by \((W^2{:}W{:}0)\) for any \(W \neq 0\).
+Using these techniques, we can obtain the following costs for computing
+\(n\) successive doublings, depending on the base field and the curve
+parameters:</p>
+<ul>
+<li>\(n\)(2M+5S) (for all curves)</li>
+<li>\(n\)(1M+6S) (if \(q = 3\bmod 4\))</li>
+<li>\(n\)(4M+2S)+1M (if \(q = 3\) or \(5\bmod 8\))</li>
+<li>\(n\)(1M+5S)+1S (if \(a = 0\))</li>
+<li>\(n\)(2M+4S) (if \(a = -1\) and \(b = 1/2\))</li>
+</ul>
+<p>Please refer to <a href="doubleodd.pdf">the whitepaper</a> (section 4.1) for
+additional details on these formulas.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="formulas-xy.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="formulas-xu.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="formulas-xy.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="formulas-xu.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

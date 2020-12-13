@@ -1,0 +1,1273 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Double-Odd Elliptic Curves</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">5.</strong> Implementations</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Double-Odd Elliptic Curves</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#double-odd-elliptic-curves" id="double-odd-elliptic-curves">Double-Odd Elliptic Curves</a></h1>
+<p>Double-odd elliptic curves are a large subset of elliptic curves: these
+are curves whose order is equal to 2 modulo 4 (i.e. the order is the
+double of an odd integer). On top of double-odd elliptic curves, we can
+define a <strong>prime order group</strong> suitable for building cryptographic
+protocols. This is similar to what <a href="https://ristretto.group/">Ristretto</a>
+achieves for twisted Edwards curves, albeit with a different method.
+Some highlights of double-odd elliptic curves are:</p>
+<ul>
+<li>
+<p>There is no cofactor to deal with. A clean prime order group
+abstraction is provided, with a canonical encoding for elements
+which is automatically verified when decoding.</p>
+</li>
+<li>
+<p>The encoding is economical: for \(n\)-bit security, group
+elements are encoded over \(2n+1\) bits (compared to \(2n+3\)
+for Ristretto).</p>
+</li>
+<li>
+<p>All group operations are supported by unified and complete formulas
+amenable to efficient and secure (constant-time) implementations.</p>
+</li>
+<li>
+<p>No drastically new cryptographic hypothesis is introduced.
+Double-odd elliptic curves are fairly mundane; about 1/4th of all
+elliptic curves are double-odd curves. Such curves are considered
+secure for cryptography, just like any other random elliptic curve
+with a large enough subgroup of prime order.</p>
+</li>
+<li>
+<p>The formulas are <em>fast</em> and provide performance at least on par with
+twisted Edwards curves. In some respects they are faster; e.g. point
+doublings can be performed, for half of double-odd curves, with six
+multiplications (down to 1M+5S for some specific curves).</p>
+</li>
+</ul>
+<p>In order to leverage these techniques, two specific double-odd elliptic
+curves are defined: do255e and do255s. Both provide &quot;128-bit security&quot;
+(technically, 127 bits); do255e is a GLV curve that can leverage an
+internal endomorphism for further improved performance, while do255s is
+a perfectly ordinary curve.</p>
+<h2><a class="header" href="#resources" id="resources">Resources</a></h2>
+<p>The <a href="doubleodd.pdf">whitepaper</a> contains all the formulas and
+demonstrations; it also specifies the use of do255e and do255s in
+higher-level cryptographic functionalities (key pair generation, key
+exchange, signature, and hash-to-curve). Most of the present site
+consists in extracts from this whitepaper.</p>
+<p>Several implementations of do255e and do255s exist and are listed
+in the <a href="implementations.html">implementations section</a>.</p>
+<h2><a class="header" href="#outline" id="outline">Outline</a></h2>
+<p>Subsequent pages in this site include the following:</p>
+<ul>
+<li>
+<p><a href="intro.html">A geometrical introduction to double-odd elliptic curves</a>:
+a self-contained explanatory text (with pictures)
+to explain the motivation and the core ideas of this work.</p>
+</li>
+<li>
+<p>The <a href="formulas.html">formulas section</a> lists useful formulas for
+computing over points of double-odd elliptic curves with several
+convenient systems of coordinates.</p>
+</li>
+<li>
+<p>Explicit <a href="curves.html">curve choices</a> are listed: these are curves
+do255e and do255s. Selection criteria and curve parameters are
+provided.</p>
+</li>
+<li>
+<p>Available <a href="implementations.html">open-source implementations</a> are
+listed.</p>
+</li>
+</ul>
+<h2><a class="header" href="#about" id="about">About</a></h2>
+<p>Double-odd elliptic curves were designed by Thomas Pornin, who also
+wrote this Web site, with contributions from Paul Bottinelli, Gérald
+Doussot and Eric Schorn.</p>
+<style type="text/css">
+    .coal img {
+        background-color: #E0E0E0;
+    }
+    .navy img {
+        background-color: #E0E0E0;
+    }
+    .ayu img {
+        background-color: #E0E0E0;
+    }
+</style>
+<h1><a class="header" href="#a-geometrical-introduction-to-double-odd-elliptic-curves" id="a-geometrical-introduction-to-double-odd-elliptic-curves">A Geometrical Introduction to Double-Odd Elliptic Curves</a></h1>
+<p>To give an intuition about double-odd elliptic curves, why we use them
+and how we leverage their structure, we present here a geometrical
+interpretation.</p>
+<p>For use in cryptography, we work over a finite field \(\mathbb{F}_q\)
+of order \(q\), typically integers modulo a given prime. All we
+explain here also works over field extensions, in which case \(q\) is
+a given power of a prime integer (called the <em>field characteristic</em>).
+The only restriction is that the characteristic should not be 2 or 3
+(elliptic curves over such fields use different equations and rules).
+However, finite field are not very visual; the pictures below <em>pretend</em>
+that we are using real numbers, where there are such things as
+continuous functions. These pictures are still useful in getting used
+to the underlying ideas.</p>
+<h2><a class="header" href="#motivation" id="motivation">Motivation</a></h2>
+<h3><a class="header" href="#short-weierstraß-curves" id="short-weierstraß-curves">Short Weierstraß Curves</a></h3>
+<p>Let's start with a classic &quot;short Weierstraß&quot; curve and the definition
+of point addition, as show below.</p>
+<img style="float: left; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve1-add.svg" />
+<p>The curve here is the set of points \(x, y\) that fulfill the
+curve equation \(y^2 = x^3 + Ax + B\) for two given constants \(A\)
+and \(B\) that define the curve shape. As is well-known, <em>every</em>
+elliptic curve can be converted into that kind of shape and equation
+with appropriate changes of variables.</p>
+<p>Point addition is defined as follows:</p>
+<ul>
+<li>
+<p>The neutral element is the formal extra &quot;point-at-infinity&quot; (which
+is not in the plane and does not have coordinates).</p>
+</li>
+<li>
+<p>For a point \(P\), the point \(-P\) is the symmetric of the
+point relatively to the horizontal axis.</p>
+</li>
+<li>
+<p>When adding two points \(P\) and \(Q\) together, the line
+\((PQ)\) is drawn; it intersects the curve in a third point
+which is \(-(P+Q)\), i.e. the opposite of the sum of \(P\)
+and \(Q\).</p>
+</li>
+</ul>
+<p>This is illustrated by the red lines on the figure. Given the
+coordinates of \(P\) and \(Q\), the coordinates of \(P+Q\) can be
+computed as rational functions of \(P\) and \(Q\), with coefficients
+that depend only on the curve parameters. Unfortunately, this process
+has <em>exceptional cases</em> which must be handled differently:</p>
+<ul>
+<li>
+<p>The point-at-infinity does not have defined coordinates, so it
+can be hard to apply rational functions on these non-existing
+coordinates.</p>
+</li>
+<li>
+<p>When \(P = -Q\), the line is vertical \((PQ)\) and the third
+intersection point is &quot;at infinity&quot;, again with no defined
+coordinates.</p>
+</li>
+<li>
+<p>When \(P = Q\) (i.e. a <em>point doubling</em>), the line \((PQ)\) is
+not well-defined; if we apply the rational functions that compute
+point addition in general, we end up dividing zero by zero. Instead,
+we have to use the tangent to the curve on \(P\), and this leads
+to different rational functions to obtain the result.</p>
+</li>
+</ul>
+<p>These exceptional cases are mightily inconvenient. The point-at-infinity
+can somehow be handled by switching to fractional coordinates, in which
+each coordinate is represented by a fraction. In that case, infinity
+corresponds to a denominator value of zero. There are several well-known
+systems of coordinates that use fractions, e.g. <em>projective coordinates</em>
+(\(x, y) = (X/Z, Y/Z)\)) or <em>Jacobian coordinates</em> (\(x, y) = (X/Z^2,
+Y/Z^3)\)). Formulas working on fractional coordinates can be
+established, that will handle infinities, and have the added benefit of
+allowing most computations to be done only with additions, subtractions
+and multiplications, and no divisions. A single division will be needed
+only at the end of a long computation, usually for encoding a point into
+a well-defined sequence of bytes. This promotes performance, because
+divisions are more expensive than multiplications. The <em>cost</em> of
+formulas is thus often expressed as a number of multiplications; it is
+common practice to separate general multiplications from squarings, the
+latter being usually somewhat faster than multiplications.</p>
+<p>Handling the exceptional case related to point doublings is harder. This
+case can be detected with a simple test, but this leads to conditional
+execution, i.e. non constant-time behaviour, which is unsafe in all
+generality (timing attacks will detect that occurrence which may lead to
+information leaks). In general, one can apply <em>both</em> formulas, for
+general addition and for doubling, and select the right one afterwards
+in a constant-time way, but this is expensive. <em>Complete formulas</em> that
+do not have exceptional cases, in projective coordinates, <a href="https://eprint.iacr.org/2015/1060">have been
+published</a>; they allow safe
+implementations of any curve (of odd order), but at a cost: each point
+addition requires 12 multiplications in the field (12M), while
+specialized doubling formulas (when the two operands are statically
+known to be the same point) need 8 multiplications and 3 squarings
+(8M+3S). If we forego completeness, Jacobian coordinates lead to more
+efficient formulas (especially doublings, in cost 3M+5S), but analysis
+becomes a lot harder because we must prove that no exceptional case may
+be inadvertently reached when using incomplete formulas. This can lead,
+and has led, to exploitable vulnerabilities.</p>
+<p>Apart from this tension between performance and safety, short Weierstraß
+curves can have nice characteristics:</p>
+<ul>
+<li>
+<p>The order of a curve is close to that of the field, but can be about
+any integer in a range centered on that value, so that we may choose
+curves with a prime order. Higher-level cryptographic
+functionalities building on elliptic curves usually need a prime
+order group.</p>
+</li>
+<li>
+<p>With point compression, elements of a curve with \(2n\) points and
+offering &quot;\(n\)-bit security&quot; can be encoded over \(2n+1\) bits.
+This is the best one can realistically hope for with elliptic
+curves.</p>
+</li>
+</ul>
+<h3><a class="header" href="#twisted-edwards-curves-and-montgomery-curves" id="twisted-edwards-curves-and-montgomery-curves">Twisted Edwards Curves and Montgomery Curves</a></h3>
+<img style="float: right; width: 40%; padding: 0.5em; margin: 1.5em;" src="edwards1.svg" />
+<p><em>Twisted Edwards curves</em> use a different kind of polynomial equation (of
+degree 4) that leads to the shape shown here; the point addition rule is
+somewhat different and harder to represent on a picture (I won't try).
+They are still elliptic curves, though, and therefore they can be turned
+into a Weierstraß curves with a birational transform on coordinates. As
+Weierstraß curves, twisted Edwards curves become <em>Montgomery curves</em>
+(which were historically discovered before Edwards curves). A well-known
+Montgomery curve is Curve25519 (defined over the field of integers
+modulo \(2^{255}-19\)) and its twisted Edwards counterpart is called
+Edwards25519. The <a href="https://tools.ietf.org/html/rfc8032">Ed25519 signature
+algorithm</a> uses Edwards25519, while
+the <a href="https://tools.ietf.org/html/rfc7748">X25519 key exchange algorithm</a>
+works over Curve25519. From a security point of view, they are the same
+curve.</p>
+<p>The most interesting aspect of twisted Edwards curves is that point
+addition can be expressed with formulas that have no exceptional cases,
+and these formulas are substantially more efficient than the ones for
+short Weierstraß curves (8M for general point addition, 4M+4S for point
+doubling).</p>
+<p>They have, however, a drawback, which is the <em>cofactor</em>. A twisted
+Edwards curve cannot have prime order, since its order is always a
+multiple of 4. The ratio between the curve order and the prime order of
+the subgroup which is relevant to cryptographic applications is called
+the cofactor. The cofactor for Edwards25519 is 8. The cofactor tends to
+be a nuisance for cryptographic protocols, because it allows the
+existence of several &quot;equivalent&quot; points that still look different from
+each other on the wire. This can lead to several issues, e.g.:</p>
+<ul>
+<li>
+<p>The cofactor induces public key malleability, which was exploited in
+a <a href="https://www.getmonero.org/2017/05/17/disclosure-of-a-major-bug-in-cryptonote-based-currencies.html">double-spend
+attack</a>
+on the Monero cryptocurrency.</p>
+</li>
+<li>
+<p>Several equations are possible to validate Ed25519 signatures, and
+while they have equivalent security, they imply that it is possible
+to (maliciously) make signatures that will be accepted by some
+verifiers, and rejected by others. This tends to break <a href="https://zips.z.cash/zip-0215">consensus-based
+distributed applications</a>.</p>
+</li>
+</ul>
+<p>For more cases and extensive analysis, see <a href="https://eprint.iacr.org/2019/526">this report from Cramer and
+Jackson</a>. The gist of it is simple: we
+need a prime order group. When using a curve with a non-trivial
+cofactor, the low-order points and the malleability <em>may</em> require some
+corrective actions, which is usually a generous sprinkling of
+multiplications by the cofactor in various place of the upper protocol,
+and explicit detection of the few points whose order is a divisor of the
+cofactor. Even when such mitigations are not required, some extensive
+and non-obvious analysis is needed to ascertain this fact. In that
+sense, a lot of the apparent simplicity of use of twisted Edwards curves
+has been obtained not by removal of complexity, but by moving it into
+upper layers of the overal protocol design.</p>
+<h3><a class="header" href="#decaf-and-ristretto" id="decaf-and-ristretto">Decaf and Ristretto</a></h3>
+<p><a href="https://ristretto.group/">Decaf and Ristretto</a> are an <em>almost</em> perfect
+solution to the cofactor issues with twisted Edwards curves. They are
+applicable to such curves when the cofactor is exactly 4 (for Decaf) or
+8 (for Ristretto). With Decaf/Ristretto, what you decode is a point on
+the twisted Edwards curve, which is not necessarily a member of the
+prime order subgroup on that curve. However, all points that differ from
+each other by only a low order point will encode to the same sequence of
+bits, and any two points that encode to a given sequence of bits differ
+from each other by only a low order point. This leverages all the
+performance and completeness of formulas on twisted Edwards curves, but
+provides the required abstraction for building higher-level
+cryptographic functionalities: a prime order group with a canonical and
+verified encoding.</p>
+<p>There are a few remaining points where Decaf/Ristretto is suboptimal:</p>
+<ul>
+<li>
+<p>The decoding and encoding processes both use an inverse square root
+in the field, which is implemented with a modular exponentiation,
+with a non-negligible cost. Ordinary twisted Edwards curves, and
+short Weierstraß curves, also need a square root for decoding
+(when using a compressed encoding format), but for encoding they
+&quot;only&quot; need an inversion. Inversion is traditionally implemented
+with Fermat's little theorem, i.e. another exponentiation, but
+<a href="https://eprint.iacr.org/2020/972">faster methods exist</a>. Decaf
+and Ristretto cannot leverage that.</p>
+</li>
+<li>
+<p>The cofactor still requires some space: for \(n\)-bit security,
+the curve must work over a field of size \(2n+2\) bits (for Decaf)
+or \(2n+3\) bits (for Ristretto), leading to the same size
+requirement for encoding.</p>
+</li>
+</ul>
+<p>And, more generally, while the currently known formulas for twisted
+Edwards curves are fast, nothing proves that one cannot be better.</p>
+<h2><a class="header" href="#double-odd-elliptic-curves-1" id="double-odd-elliptic-curves-1">Double-Odd Elliptic Curves</a></h2>
+<p>Enter double-odd elliptic curves. This started with a question: since
+short Weierstraß curves can have prime order, but Montgomery/Edwards
+curves have cofactor at least 4, what of the &quot;intermediate&quot; curves with
+cofactor 2? Is there anything that can be done with them?</p>
+<p>It turns out that such curves, which we named <em>double-odd elliptic
+curves</em>, have interesting properties that help in both finding a
+canonical encoding for a prime order group (in a way similar to
+Ristretto) while also giving options for unified and complete formulas.
+It so happens that the resulting formulas are also quite fast, in
+particular with regard to computing point doublings -- and point
+doublings tend to represent the large majority of the cost of point
+multiplication by a scalar, so any gains in that area are most welcome.</p>
+<h3><a class="header" href="#curve-equation-and-point-encoding" id="curve-equation-and-point-encoding">Curve Equation and Point Encoding</a></h3>
+<p>Let's consider a curve \(E\) with order \(2r\) for some odd integer
+\(r\) (in practice, we'll choose a curve such that \(r\) is prime).</p>
+<img style="float: left; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve2-changeofvariable.svg" />
+<p>A double-odd curve necessarily has a single point of order 2, i.e. a point
+which, added to itself, yields the point-at-infinity. Equivalently, points
+or order 2 are points with \(y = 0\). Let's call that point \(N\).</p>
+<p>With a simple change of variable (adding a constant to the \(x\)
+coordinate), we can always arrange for \(N\) to be the point \((0,
+0)\), as illustrated on the figure. This transform the curve equation
+into another form which is similar but not identical to short Weierstraß
+equations: \(y^2 = x(x^2 + ax + b)\) for two constants \(a\) and
+\(b\).</p>
+<p>Mathematical analysis shows that for all double-odd elliptic curves, we
+get such an equation such that neither \(b\) nor \(a^2 - 4b\) is a
+square in the field. The converse is also true: all curves with equation
+\(y^2 = x(x^2 + ax + b)\) with non-square \(b\) and \(a^2 - 4b\)
+are double-odd curves.</p>
+<p>Given a double-odd elliptic curve with order \(2r\), there is a subgroup
+of order \(r\), which consists in all the points that, multiplied by
+\(r\), yield the point-at-infinity. This subgroup is called the
+<em>points of \(r\)-torsion</em> and is traditionally noted \(E[r]\).
+In particular, for any point \(P\) on \(E\):</p>
+<ul>
+<li>if \(P \in E[r]\), then \(P + N \notin E[r]\);</li>
+<li>if \(P \notin E[r]\), then \(P + N \in E[r]\).</li>
+</ul>
+<p>The subgroup \(E[r]\) has order \(r\) (which we chose to be prime) so
+this looks like the prime order subgroup we want to use for cryptography.</p>
+<p>Let's now consider a point \(P\) on the curve (distinct from \(N\),
+and not the point-at-infinity either), and the addition of \(N\) to
+\(P\).</p>
+<img style="float: right; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve3-addN.svg" />
+<p>By the geometrical definition of the point addition, we draw the line
+\((PN)\), which then intersects the curve on a third point, which is
+\(-(P+N) = (-P)+N\). Crucially, exactly one of \(P\) and \(-P+N\)
+is a point of \(r\)-torsion. Since the line \((PN)\) goes through
+\(N\) (which is at a fixed, known position) and is not vertical
+(because \(N\) is the only point with \(x = 0\)), that line is
+uniquely defined by its slope \(w = y/x\). Thus, for a given slope
+value \(w\) that defines a line through \(N\):</p>
+<ul>
+<li>
+<p>either this line does not intersect the curve in any other point;</p>
+</li>
+<li>
+<p>or it intersects the curve in exactly two points, exactly one of
+which is in \(E[r]\).</p>
+</li>
+</ul>
+<p>This means that the mapping of a point \((x, y) \in E[r]\) into
+the slope value \(w = y/x\) is <strong>injective</strong>. Thus, it can potentially
+be used to unambiguously encode elements of \(E[r]\).</p>
+<p>How about decoding? It so happens (this is not obvious geometrically) that
+an extra property applies here: for any \(P = (x, y) \in E\), with
+\(P \neq N\) and not the point-at-infinity, then \(P \in E[r]\) if
+and only if \(x\) is a square in the field. This result is obtained
+analytically from the following:</p>
+<ul>
+<li>
+<p>Every element of \(E[r]\) is the double of some other point
+(because \(P = (r+1)P\), and \(r+1\) is an even integer),
+and the \(x\) coordinate of the double of \(x, y\) is
+computed as \(((x^2-b)/(2y))^2\), which is a square.</p>
+</li>
+<li>
+<p>If \(P = (x, y)\) then \(P+N = (b/x, -by/x^2)\), and since
+\(b\) is not a square, if \(x\) is a square then \(b/x\) is
+not, and vice versa.</p>
+</li>
+</ul>
+<p>At that point, we can <strong>encode</strong> and <strong>decode</strong> elements of \(E[r]\):</p>
+<ul>
+<li>Encoding of \((x, y)\) is simply the slope value \(w = y/x\).</li>
+<li>Decoding is using the curve equation to find the two points
+corresponding to a given slope \(w = y/x\) (it is a degree-2
+equation, which involves a square root computation), then keeping
+the solution \(x\) which is a square.</li>
+</ul>
+<p>Note that encoding only requires a single inversion (thus, this is as
+fast as with twisted Edwards curves) while decoding uses a square root
+<em>and</em> a square detection (Legendre symbol), which would make it slower
+than twisted Edwards curves and Decaf/Ristretto. However, practical
+implementation of inversion and Legendre symbol can be quite fast; on
+small microcontrollers based on the ARM Cortex M0+, inversion and
+Legendre symbol can be computed in, respectively, 1/5th and 1/6th of the
+cost of a square root (see
+<a href="https://research.nccgroup.com/2020/09/28/faster-modular-inversion-and-legendre-symbol-and-an-x25519-speed-record/">this</a>).
+Thus, the total cost of decoding and encoding can realistically be lower
+than that of Decaf/Ristretto, and close to what is obtained with plain
+Weierstraß curves or twisted Edwards curves.</p>
+<img style="float: right; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve4-addNxw.svg" />
+<p>Since encoding uses \(w\), we can use it directly as a point
+coordinate, as a replacement to \(y\). This does not lose information,
+and it makes the computation of \(P+N\) from \(P\) even easier:
+for a point \(P = (x, w)\), we have \(P+N = (b/x, -w)\).</p>
+<p>Use of \(w\) adds an extra difficulty, which we will have to deal
+with, namely that \(w\) is not defined for point \(N\) (even though
+that point has well-defined \(x\) and \(y\) coordinates). We then
+have two tricky points: the point-at-infinity, and \(N\). As will be
+exposed later on, we can avoid the point-at-infinity altogether. Point
+\(N\) can be represented with fractional representations with a
+denominator equal to 0. Another solution (which we also leverage) is to
+use \(u = x/y\) (instead of \(w = y/x\)) which can be extended to
+\(u = 0\) for the point \(N\) without breaking formulas.</p>
+<h3><a class="header" href="#point-addition-and-unified-formulas" id="point-addition-and-unified-formulas">Point Addition and Unified Formulas</a></h3>
+<p>Let's consider the exceptional case of adding a point \(P\) to itself.</p>
+<img style="float: left; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve5-double.svg" />
+<p>The classical definition involves taking the tangent to the curve on
+point \(P\) as the line that leads to \(-(P+P)\). This is
+inconvenient because the formulas that yield the slope of that tangent
+are quite different from those that are used for &quot;normal&quot; point
+addition, so you have to know (or check) that the two addition operands
+are the same point. This leads to either unsafe implementations (non
+constant-time), or computational overhead and decreased performance.</p>
+<p>However, on double-odd elliptic curves, we can use \(N\). As explained
+previously, from a point \(P\), we can obtain \(P+N\) easily. This
+leads to the idea of computing an addition \(P+Q\) as the sum of
+\(P\) and \(Q+N\).</p>
+<img style="float: right; width: 40%; padding: 0.5em; margin: 1.5em;" src="curve6-doublewithN.svg" />
+<p>As is illustrated on this figure, \(P\) and \(P+N\) are distinct
+points, and not opposite to each other, so that addition of \(P\)
+with \(P+N\) is no longer an exceptional case, and no tangent line
+is involved.</p>
+<p>More generally, when \(P\) and \(Q\) are two elements of \(E[r]\),
+then we can add \(P\) with \(Q+N\) and it is guaranteed that \(P\)
+and \(Q+N\) are distinct points, and not opposite to each other, since
+\(P \in E[r]\) but \(Q+N \notin E[r]\). This naturally avoids
+exceptional cases related to point doubling; this is our main method
+to achieve <strong>unified</strong> formulas (formulas for which the only exceptional
+cases involve the point-at-infinity).</p>
+<p>This trick requires two additions of \(N\) (one on one of the
+operands, and another on the result to get back to \(E[r]\)). Though
+these operations are inexpensive, we can do slightly better, with a
+trick which we will integrate in the formal definition of our prime
+order group.</p>
+<h3><a class="header" href="#a-prime-order-group" id="a-prime-order-group">A Prime Order Group</a></h3>
+<p>We <em>define</em> our prime order group \(\mathbb{G}\) as the points of
+\(E\) which are <em>not</em> in \(E[r]\):
+\[ \mathbb{G} = \{\, P+N \,|\, P \in E[r] \,\} \]
+Each element of \(\mathbb{G}\) can be written as \(P+N\) with
+\(P\) being a point in \(E[r]\). We can thus define the group
+law on \(\mathbb{G}\) as follows:</p>
+<ul>
+<li>
+<p>Neutral element is \(N\).</p>
+</li>
+<li>
+<p>The opposite of \(P+N\) is \(-P+N\) (which is equal to
+\(-(P+N)\) and thus corresponds to the negation of the \(y\),
+\(w\) or \(u\) coordinate, depending on whichever coordinate
+system we are using).</p>
+</li>
+<li>
+<p>The addition in \(\mathbb{G}\) (here denoted with \( * \)) is:
+\[\begin{eqnarray*}
+(P+N) * (Q+N) &amp;=&amp; (P+N) + ((Q+N)+N) \\
+&amp;=&amp; P + (Q+N) \\
+\end{eqnarray*}\]</p>
+</li>
+</ul>
+<p>This definition means that a single extra addition with \(N\) is
+needed to compute the group law. Maybe more importantly, it also removes
+the need to deal with the point-at-infinity, except in a transient way:
+the point-at-infinity is not part of the group, and the neutral \(N\)
+has well-defined \(x, y\) coordinates. This simplifies formulas and
+helps with achieving completeness.</p>
+<p>On this group, we can derive formulas that achieve the following
+results:</p>
+<ul>
+<li>
+<p>In Jacobian \((x, w)\) coordinates, a group element is represented
+by \((X{:}W{:}Z)\) with \(x = X/Z^2\) and \(w = W/Z\) (for the
+point \(N\), we have \(X = Z = 0\) and \(W \neq 0\)). This
+yields:</p>
+<ul>
+<li>
+<p>Unified point addition formulas in cost 8M+6S (mixed addition
+in 8M+3S).</p>
+</li>
+<li>
+<p>Complete point doubling formulas in cost 2M+5S. For half of the
+curves, this can be reduced to 1M+6S. For some specific curves,
+2M+4S can be achieved.</p>
+</li>
+<li>
+<p>Additional savings are obtained when computing multiple
+successive doublings. For half of the curves, \(n\) doublings
+cost \(n\)(4M+2S)+1M. For some specific curves, this gets
+down to \(n\)(1M+5S)+1S.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In fractional \((x, u)\) coordinates, a group element is represented
+by \((X{:}Z{:}U{:}T)\) with \(x = X/Z\) and \(u = U/T\), and
+\(ZT \neq 0\). Formulas yield:</p>
+<ul>
+<li>
+<p><strong>Complete</strong> point addition in cost 10M (mixed addition in 8M).</p>
+</li>
+<li>
+<p><strong>Complete</strong> point doubling in cost 3M+6S. When computing
+a sequence of successive doublings, the same per-doubling
+marginal costs as in Jacobian \((x, w)\) coordinates are
+obtained, albeit with a higher initial overhead (e.g.
+\(n\)(1M+5S)+3M, i.e. overhead of 3M instead of 1S at
+the start of the sequence).</p>
+</li>
+</ul>
+</li>
+<li>
+<p>A ladder \(x\)-only algorithm can be performed in cost 8M+2S per
+bit. This is somewhat slower than Montgomery curves (in 5M+4S) but
+still a tolerable option for small systems with severe RAM
+constraints. For key exchange, this ladder can also avoid the
+square root computation involved in point decoding.</p>
+</li>
+</ul>
+<h1><a class="header" href="#formulas" id="formulas">Formulas</a></h1>
+<p>We can derive many formulas working in several coordinate systems.
+We give in the following pages formulas for:</p>
+<ul>
+<li><a href="formulas-xy.html">Affine \((x, y)\) coordinates</a></li>
+<li><a href="formulas-xw.html">Affine and Jacobian \((x, w)\) coordinates</a></li>
+<li><a href="formulas-xu.html">Affine and fractional \((x, u)\) coordinates</a></li>
+<li><a href="formulas-ladder.html">x-only point multiplication ladders</a></li>
+</ul>
+<p>Proofs for these formulas, as well as extra structures and other
+mathematical considerations, are explained at length in the
+<a href="doubleodd.pdf">whitepaper</a>.</p>
+<p>In all these formulas, the following apply:</p>
+<ul>
+<li>
+<p>The base curve \(E\) has equation \(y^2 = x(x^2 + ax + b)\).
+Group \(\mathbb{G}\) consists of the point of \(E\) which are
+not points of \(r\)-torsion.</p>
+</li>
+<li>
+<p>The neutral is \(N = (0, 0)\). The group law is called &quot;addition&quot;
+and denoted as such. Group \(\mathbb{G}\) is homomorphic to the
+subgroup of points of \(r\)-torsion \(E[r]\) and thus has the
+same resistance to discrete logarithm.</p>
+</li>
+</ul>
+<h1><a class="header" href="#affine-x-y-coordinates" id="affine-x-y-coordinates">Affine (x, y) Coordinates</a></h1>
+<p>Given points \(P_1 = (x_1, y_1)\) and \(P_2 = (x_2, y_2)\) in
+\(\mathbb{G}\), their sum in the group \(P_3 = (x_3, y_3) = P_1 +
+P_2\) is computed with:
+\[\begin{eqnarray*}
+x_3 &amp;=&amp; \frac{b((x_1 + x_2)(x_1 x_2 + b) + 2a x_1 x_2 + 2 y_1 y_2)}{(x_1 x_2 - b)^2} \\
+y_3 &amp;=&amp; \frac{b(2a(x_1 y_2 + x_2 y_1)(x_1 x_2 + b) + (x_1^2 y_2 + x_2^2 y_1)(x_1 x_2 + 3b) + (y_1 + y_2)(3b x_1 x_2 + b^2))}{-(x_1 x_2 - b)^3}
+\end{eqnarray*}\]</p>
+<p>These formulas are complete. Denominators can never be zero (because
+\(x_1 x_2\) is a quadratic residue, but \(b\) is not).</p>
+<h1><a class="header" href="#affine-and-jacobian-x-w-coordinates" id="affine-and-jacobian-x-w-coordinates">Affine and Jacobian (x, w) Coordinates</a></h1>
+<p>In \((x, w)\) coordinates, the curve equation becomes:
+\[ w^2 x = x^2 + ax + b \]
+The neutral \(N\) does not have a defined affine \(w\) coordinate.
+For points in \(\mathbb{G}\) other than \(N\), the \(w\)
+coordinates is non-zero.</p>
+<h2><a class="header" href="#encoding-and-decoding" id="encoding-and-decoding">Encoding and Decoding</a></h2>
+<p>Encoding of \((x, w)\) is a simple encoding of the \(w\) coordinate.</p>
+<p>Decoding proceeds as follows:</p>
+<ul>
+<li>
+<p>If \(w = 0\), then return the point \(N\).</p>
+</li>
+<li>
+<p>Solve for \(x\) the equation \(x^2 - (w^2 - a)x + b = 0\):</p>
+<ul>
+<li>Compute \(\Delta = (w^2 - a)^2 - 4b\) (which is necessarily
+non-zero).</li>
+<li>If \(\Delta\) is not a quadratic residue, then there is no
+solution (the provided encoding is invalid). Otherwise, there
+are two solutions for \(x\), depending on which square root
+of \(\Delta\) is used:
+\[ x = \frac{w^2 - a \pm \sqrt{\Delta}}{2} \]</li>
+<li>Exactly one of the two solutions is a quadratic residue;
+use the other one.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#affine-coordinates" id="affine-coordinates">Affine Coordinates</a></h2>
+<p>Given points \(P_1 = (x_1, w_1)\) and \(P_2 = (x_2, w_2)\) in
+\(\mathbb{G}\), their sum in the group \(P_3 = (x_3, w_3) = P_1 +
+P_2\) is computed with:
+\[\begin{eqnarray*}
+x_3 &amp;=&amp; \frac{b x_1 x_2 (w_1 + w_2)^2}{(x_1 x_2 - b)^2} \\
+w_3 &amp;=&amp; -\frac{(w_1 w_2 + a)(x_1 x_2 + b) + 2b(x_1 + x_2)}{(w_1 + w_2)(x_1 x_2 - b)}
+\end{eqnarray*}\]</p>
+<p>These formulas are unified: they work properly for all points except when
+\(P_1\), \(P_2\) or \(P_3\) is the neutral \(N\).</p>
+<p>Specialized doubling formulas, to compute the double \((x', w')\) of
+the point \((x, w)\):
+\[\begin{eqnarray*}
+x' &amp;=&amp; \frac{4bw^2}{(2x + a - w^2)^2} \\
+w' &amp;=&amp; - \frac{w^4 + (4b-a^2)}{2w(2x + a - w^2)}
+\end{eqnarray*}\]</p>
+<p>Again, these formulas are only unified, since \(N\) does not have a
+defined \(w\) coordinate. Note that if the input point \(P\) is
+not \(N\), then its double \(2P\) is not \(N\) either, since
+the group \(\mathbb{G}\) has odd order \(r\).</p>
+<h2><a class="header" href="#jacobian-coordinates" id="jacobian-coordinates">Jacobian Coordinates</a></h2>
+<p>Jacobian coordinates represent point \((x, w)\) as the triplet
+\((X{:}W{:}Z)\) with \(x = X/Z^2\) and \(w = W/Z\). The
+point \(N\) is represented by \((0{:}W{:}0)\) for any \(W \neq 0\).
+Jacobian coordinates correspond to an isomorphism between curve
+\(E(a, b)\) and curve \(E(aZ^2, bZ^4)\).</p>
+<p>The addition of \(P_1 = (X_1{:}W_1{:}Z_1)\) with \(P_2 =
+(X_2{:}W_2{:}Z_2)\) into \(P_3 = (X_3{:}W_3{:}Z_3)\) is obtained with
+the following:
+\[\begin{eqnarray*}
+X_3 &amp;=&amp; b X_1 X_2 (W_1 Z_2 + W_2 Z_1)^4 \\
+W_3 &amp;=&amp; -((W_1 W_2 + a Z_1 Z_2)(X_1 X_2 + b Z_1^2 Z_2^2)
++ 2b Z_1 Z_2 (X_1 Z_2^2 + X_2 Z_1^2)) \\
+Z_3 &amp;=&amp; (X_1 X_2 -b Z_1^2 Z_2^2)(W_1 Z_2 + W_2 Z_1)
+\end{eqnarray*}\]
+These formulas can be computed with cost 8M+6S. If using
+Chudnovsky coordinates \((X{:}W{:}Z{:}Z^2)\) (i.e. we also keep around
+the value \(Z^2\) in addition to \(Z\)), then cost is lowered to
+8M+5S, but in-memory representation is larger.</p>
+<p>Addition formulas are unified, because they do not compute the correct
+result when one or both of the operands are equal to \(N\). However,
+if \(P_1 \neq N\) and \(P_2 = -P_1\), then a valid representation of
+\(N\) is computed. Thus, the only exceptional cases that must be
+handled in an implementation are \(P_1 = N\) and \(P_2 = N\). These
+two cases can be handled inexpensively with a couple of conditional
+copies, to obtain a complete <em>routine</em> which induces no tension between
+security and performance.</p>
+<p>For doubling point \((X{:}W{:}Z)\) into \((X'{:}W'{:}Z')\), formulas
+are:
+\[\begin{eqnarray*}
+X' &amp;=&amp; 16bW^4 Z^4 \\
+W' &amp;=&amp; -(W^4 + (4b-a^2)Z^4) \\
+Z' &amp;=&amp; 2WZ(2X + aZ^2 - W^2)
+\end{eqnarray*}\]
+These formulas are <em>complete</em>: they work properly for all inputs, including
+the neutral element \(N\).</p>
+<p>Generic implementation of point doubling is easily done in cost 2M+5S.
+If the base field is such that \(q = 3\bmod 4\), then \(4b - a^2\)
+is a square, and, provided that we have \(e = \sqrt{4b - a^2}\) and
+that the constant \(e\) is small, then we can compute \(W'\) as
+\((e/2)(2WZ)^2 - (Z^2 + eW^2)^2\), which leads to an implementation in
+cost 1M+6S.</p>
+<p>More interestingly, if parameters are such that \(-a\) is a square,
+and that \(2b = a^2\), then we can obtain an implementation of
+doubling in cost 2M+4S. Analysis shows that such a situation can happen
+only if \(q = 3\bmod 8\), and there will be a single curve (up to
+isomorphism) that matches these conditions; we can thus assume that
+the curve parameters are \(a = -1\) and \(b = 1/2\). In that case,
+the point doubling algorithm becomes the following:</p>
+<ol>
+<li>\(t_1 \leftarrow WZ\)</li>
+<li>\(t_2 \leftarrow t_1^2\)</li>
+<li>\(X' \leftarrow 8 t_2^2\)</li>
+<li>\(t_3 \leftarrow (W + Z)^2 - 2t_1\)</li>
+<li>\(W' \leftarrow 2t_2 - t_3^2\)</li>
+<li>\(Z' \leftarrow 2t_1 (2X - t_3)\)</li>
+</ol>
+<p>Successive doublings rely on the definition of some isogenies:
+\[\begin{eqnarray*}
+\psi_\pi : E(a, b) &amp;\longrightarrow&amp; E(-2a\pi^2, \pi^4(a^2-4b))[r] \\
+(x, w) &amp;\longmapsto&amp; \left(\pi^2 w^2, -\frac{\pi (x - b/x)}{w}\right)
+\end{eqnarray*}\]
+for a constant \(\pi \neq 0\) (and defining that the image of the
+point-at-infinity and the image of \(N\) are both the
+point-at-infinity in the target curve). These functions are isogenies on
+the curves (that is, using classic point addition) and the image is the
+subgroup of points of \(r\)-torsion in the destination curve. If two
+constants \(\pi\) and \(\pi'\) are such that \(2\pi\pi' = 1\),
+then for any \(P \in E(a, b)\), \(\psi_{\pi'}(\psi_{\pi}(P)) = 2P\).
+In other words, composing the two isogenies brings us back to the
+original curve, and together they compute a point doubling (on the
+curve).</p>
+<p>To obtain a similar effect with our group \(\mathbb{G}\), we also
+define the following functions:
+\[\begin{eqnarray*}
+\theta_\pi : E(a, b) &amp;\longrightarrow&amp; \mathbb{G}(-2a\pi^2, \pi^4(a^2-4b)) \\
+(x, w) &amp;\longmapsto&amp; \left(\frac{\pi^2(a^2-4b)}{w^2}, \frac{\pi (x - b/x)}{w}\right)
+\end{eqnarray*}\]
+using the notation that \(\mathbb{G}(a, b)\) is our prime order group,
+defined over a base double-odd elliptic curve with parameters \(a\)
+and \(b\). With these functions, we get that both
+\(\theta_{1/2}(\psi_1(P))\) and \(\theta_{1/2}(\theta_1(P))\)
+compute the double (in \(\mathbb{G}\)) of point \(P\).</p>
+<p>We can then compute a succession of doublings by a sequence of
+invocations of these functions, freely switching between \(\psi\) and
+\(\theta\) as best suits computations, in order to minimize cost. This
+yields complete formulas; the neutral \(N\) is represented by
+\((0{:}W{:}0)\) for any \(W \neq 0\), and the point-at-infinity
+(which will appear whenever applying a \(\psi\) function on the neutral
+\(N\)) is represented by \((W^2{:}W{:}0)\) for any \(W \neq 0\).
+Using these techniques, we can obtain the following costs for computing
+\(n\) successive doublings, depending on the base field and the curve
+parameters:</p>
+<ul>
+<li>\(n\)(2M+5S) (for all curves)</li>
+<li>\(n\)(1M+6S) (if \(q = 3\bmod 4\))</li>
+<li>\(n\)(4M+2S)+1M (if \(q = 3\) or \(5\bmod 8\))</li>
+<li>\(n\)(1M+5S)+1S (if \(a = 0\))</li>
+<li>\(n\)(2M+4S) (if \(a = -1\) and \(b = 1/2\))</li>
+</ul>
+<p>Please refer to <a href="doubleodd.pdf">the whitepaper</a> (section 4.1) for
+additional details on these formulas.</p>
+<h1><a class="header" href="#affine-and-fractional-x-u-coordinates" id="affine-and-fractional-x-u-coordinates">Affine and Fractional (x, u) Coordinates</a></h1>
+<p>It can be shown that a double-odd elliptic curve is birationally
+equivalent to a subgroup of a twisted Edwards curve defined in a
+quadratic extension \(\mathbb{F}_{q^2}\). The general point addition
+formulas on that twisted Edwards curve can then be shown to be complete
+as long as we work over that specific subgroup. From these formulas, we
+can derive back a coordinate system on the original double-odd elliptic
+curve, with only values in \(\mathbb{F}_q\), that yield complete
+formulas for general point addition in the group \(\mathbb{G}\). These
+are the \(x, u\) coordinates.</p>
+<h2><a class="header" href="#affine-coordinates-1" id="affine-coordinates-1">Affine Coordinates</a></h2>
+<p>The \(x\) coordinate is the same one as in the affine \(x, y\)
+coordinates. The \(u\) coordinate is \(u = x/y\). For the
+neutral \(N\), the \(u\) coordinate is set to 0. Given points
+\(P_1 = (x_1, u_1)\) and \(P_2 = (x_2, u_2)\) in \(\mathbb{G}\),
+their sum in the group \(P_3 = (x_3, u_3)\) can be obtained with the
+following formulas:
+\[\begin{eqnarray*}
+x_3 &amp;=&amp; \frac{b((x_1 + x_2)(1 + a u_1 u_2) + 2 u_1 u_2 (x_1 x_2 + b))}
+{(x_1 x_2 + b)(1 - a u_1 u_2) - 2b u_1 u_2 (x_1 + x_2)} \\
+u_3 &amp;=&amp; \frac{-(u_1 + u_2)(x_1 x_2 - b)}
+{(x_1 x_2 + b)(1 + a u_1 u_2) + 2b u_1 u_2 (x_1 + x_2)}
+\end{eqnarray*}\]
+These formulas are <strong>complete</strong>.</p>
+<h2><a class="header" href="#fractional-coordinates" id="fractional-coordinates">Fractional Coordinates</a></h2>
+<p>In order to perform group operations efficiently, we use a fractional
+representation of the \((x, u)\) coordinates. Namely, a point
+\((x, u)\) is represented by the quadruplet \((X{:}Z{:}U{:}T)\)
+with \(ZT \neq 0\), and such that \(x = X/Z\) and \(u = U/T\).</p>
+<p>Since \(u = 1/w\), decoding of a point from its external
+representation (encoding of the value \(w\)) into fractional \(x,
+u\) is done in the same way as in \((x, w)\) coordinates; when
+\(x\) and \(w\) have been obtained, the fractional coordinates are
+set to \((x{:}1{:}1{:}w)\) (with only a special treatment for the case
+of the neutral \(N\)).</p>
+<p>The addition of \(P_1 = (X_1{:}Z_1{:}U_1{:}T_1)\) with \(P_2 =
+(X_2{:}Z_2{:}U_2{:}T_2)\) into \(P_3 = (X_3{:}Z_3{:}U_3{:}T_3)\) is
+obtained with the following addition formulas:
+\[\begin{eqnarray*}
+X_3 &amp;=&amp; b((X_1 Z_2 + X_2 Z_1)(T_1 T_2 + a U_1 U_2) + 2 U_1 U_2 (X_1 X_2 + b Z_1 Z_2)) \\
+Z_3 &amp;=&amp; (X_1 X_2 + b Z_1 Z_2)(T_1 T_2 - a U_1 U_2) - 2b U_1 U_2 (X_1 Z_2 + X_2 Z_1) \\
+U_3 &amp;=&amp; -(U_1 T_2 + U_2 T_1)(X_1 X_2 - b Z_1 Z_2) \\
+T_3 &amp;=&amp; (X_1 X_2 + b Z_1 Z_2)(T_1 T_2 + a U_1 U_2) + 2b U_1 U_2 (X_1 Z_2 + X_2 Z_1)
+\end{eqnarray*}\]
+Like their affine counterparts, these formulas are complete.</p>
+<p>They can be implemented in cost 10M by using the following algorithm,
+with the help of two precomputed constants \(\alpha =
+(4b-a^2)/(2b-a)\) and \(\beta = (a-2)/(2b-a)\):</p>
+<ol>
+<li>\(t_1 \leftarrow X_1 X_2\)</li>
+<li>\(t_2 \leftarrow Z_1 Z_2\)</li>
+<li>\(t_3 \leftarrow U_1 U_2\)</li>
+<li>\(t_4 \leftarrow T_1 T_2\)</li>
+<li>\(t_5 \leftarrow (X_1+Z_1)(X_2+Z_2) - t_1 - t_2\)</li>
+<li>\(t_6 \leftarrow (U_1+T_1)(U_2+T_2) - t_3 - t_4\)</li>
+<li>\(t_7 \leftarrow t_1 + b t_2\)</li>
+<li>\(t_8 \leftarrow t_4 t_7\)</li>
+<li>\(t_9 \leftarrow t_3 (2bt_5 + at_7)\)</li>
+<li>\(t_{10} \leftarrow (t_4 + \alpha t_3)(t_5 + t_7)\)</li>
+<li>\(X_3 \leftarrow b(t_{10} - t_8 + \beta t_9)\)</li>
+<li>\(Z_3 \leftarrow t_8 - t_9\)</li>
+<li>\(U_3 \leftarrow -t_6(t_1 - bt_2)\)</li>
+<li>\(T_3 \leftarrow t_8 + t_9\)</li>
+</ol>
+<p>The cost of 10M assumes that multiplication by constants \(a\),
+\(b\), \(\alpha\) and \(\beta\) is inexpensive, i.e. that these
+are all small integers or easily computed fractions such as \(1/2\).
+Also, \(\alpha\) and \(\beta\) are not defined in \(a = 2b\); in
+such a case, the implementation can still use the algorithm above by
+working on an isomorphic curve where \(a \neq 2b\). Indeed, the
+transform \((x, u) \mapsto (2x, u/2)\) is an easily computable
+isomorphism from \(E(a, b)\) into \(E(4a, 16b)\), which side-steps
+the issue.</p>
+<p>For point doublings, applying the general algorithm leads to a cost
+of 4M+6S (the first six multiplications are squarings in that case).
+However, we can do better, with cost 3M+6S. If the source point
+is \((X{:}Z{:}U{:}T)\), then we can compute its double in the
+group \((X''{:}Z''{:}U''{:}T'')\) as follows:
+\[\begin{eqnarray*}
+X' &amp;=&amp; (a^2-4b) XZ \\
+Z' &amp;=&amp; X^2 + aXZ + bZ^2 \\
+X'' &amp;=&amp; 4b X'Z' \\
+Z'' &amp;=&amp; X'^2 - 2a X'Z' + (a^2-4b) Z'^2 \\
+U'' &amp;=&amp; 2(a^2 - 4b) (X^2 - bZ^2) Z'U \\
+T'' &amp;=&amp; (X'^2 - (a^2 - 4b)Z'^2) T
+\end{eqnarray*}\]
+These formulas, internally, apply the \(\theta_1\) isogeny, then
+\(\theta_{1/2}\); together, these two isogenies compute a point
+doubling in \(\mathbb{G}\).</p>
+<p>As with Jacobian coordinates, sequences of successive doublings allow
+for extra optimizations. In fractional \((x, u)\) coordinates, we can
+apply the \(\psi_1\) isogeny in cost 4M+2S, with an output in Jacobian
+\((x, w)\) coordinates. We can then apply the \(\psi\) and
+\(\theta\) isogenies repeatedly, to achieve the same marginal
+per-doubling costs as in Jacobian \((x, w)\) coordinates. The final
+isogeny can be modified to produce an output back in fractional
+\((x, u)\) coordinates with very low overhead (at worst one extra
+squaring). This leads to the following costs for \(n\) successive
+doublings:</p>
+<ul>
+<li>\(n\)(2M+5S)+2M+1S (for all curves)</li>
+<li>\(n\)(1M+6S)+4M-1S (if \(q = 3\bmod 4\))</li>
+<li>\(n\)(4M+2S)+2M+2S (if \(q = 3\) or \(5\bmod 8\))</li>
+<li>\(n\)(1M+5S)+3M (if \(a = 0\))</li>
+<li>\(n\)(2M+4S)+2M+2S (if \(a = -1\) and \(b = 1/2\))</li>
+</ul>
+<p>The per-sequence overheads are higher than with Jacobian \((x, w)\)
+coordinates; thus, it is beneficial to organize operations such that
+doublings are always performed in long sequences.</p>
+<p>Please refer to <a href="doubleodd.pdf">the whitepaper</a> (section 4.2) for
+additional details on these formulas.</p>
+<h1><a class="header" href="#x-only-ladders" id="x-only-ladders">x-only Ladders</a></h1>
+<p>A ladder algorithm working only over the \(x\) coordinates of points
+can be used to compute Diffie-Hellman key exchanges over double-odd
+elliptic curves. Such ladders are already known, but our formulas are
+a bit faster than what was previously published for such curves.</p>
+<p>Suppose that we are computing a multiplication of point \(P_0\) whose
+\(x\) coordinate is known as a field element \(x_0\). At any point
+in a double-and-add algorithm, our current accumulator point is
+represented as the \(x\) coordinates of two points \(P_1\) and
+\(P_2\) which are such that \(P_2 = P_0 + P_1\) (addition in the
+group \(\mathbb{G}\)). These \(x\) coordinates are known as
+fractions, i.e. \(x_1 = X_1/Z_1\) and \(x_2 = X_2/Z_2\).
+We can then compute the \(x_3 = X_3/Z_3\) coordinate of
+\(P_3 = P_1 + P_2\) with:
+\[\begin{eqnarray*}
+X_3 &amp;=&amp; b (X_1 Z_2 - X_2 Z_1)^2 \\
+Z_3 &amp;=&amp; x_0 (X_1 X_2 - b Z_2 Z_1)^2
+\end{eqnarray*}\]
+with a cost of 4M+2S.</p>
+<p>For doubling either \(P_1\) or \(P_2\),
+we observe that when applying the isogeny \(\theta_1\) on a point
+\(P\) whose \(x\) coordinate is \(X/Z\), to obtain a point
+\(P'\) with \(x' = X'/Z'\) on the dual curve, we can compute
+\(X'\) and \(Z'\) as:
+\[\begin{eqnarray*}
+X' &amp;=&amp; (a^2 - 4b) XZ \\
+Z' &amp;=&amp; X^2 + aXZ + bZ^2 \\
+&amp;=&amp; (X + Z)(X + bZ) + (a - 1 - b)XZ
+\end{eqnarray*}\]
+with a cost of 2M. We can similarly compute \(\theta_{1/2}\) on that
+point \(P'\) with cost 2M, and that yields the \(x\) coordinate of
+\(2P\). In total, we can have the \(x\) coordinate of \(2P\),
+starting from the \(x\) cordinate of \(P\), in cost 4M.</p>
+<p>Each ladder step combines the two operations above: we replace
+\((P_1, P_2)\) with either \((2P_1, P_1+P_2)\) (if the scalar bit
+is 0) or with \((P_1+P_2, 2P_2)\) (if the scalar bit is 1). Either
+way, the cost per scalar bit is 8M+2S. This is not as efficient as
+using Jacobian \((x, w)\) or fractional \((x, u)\) coordinates,
+but it allows implementation of key exchange with less code, and
+in a more RAM-efficient way, compared with double-and-add algorithms
+with window optimizations.</p>
+<p>Since we encode points as their \(w\) coordinate, not \(x\)
+coordinate, it is convenient to define the Diffie-Hellman key algorithm
+to output, as shared secret, the value \(w^2\), for the
+\(w\)-coordinate of the resulting point. Indeed, with the
+\(\theta_1\) isogeny, the \(x\) coordinate of \(\theta_1(x, w)\)
+is equal to \((a^2-4b)/w^2\); thus, we can make a \(w^2\)-only
+ladder on curve \(E(a,b)\) by simply using an \(x\)-only ladder
+(with the formulas shown above) on the dual curve \(E(-2a, a^2-4b)\).
+In that way, a Diffie-Hellman key exchange (multiplication of the point
+from the peer by the local private key) can be implemented with a ladder
+algorithm <em>without</em> requiring full point decoding. This saves a square
+root computation. Namely, when the peer's point is received as value
+\(w\), it suffices to verify that \(w \neq 0\) and that \((w^2 -
+a)^2 - 4b\) is a quadratic residue (with a Legendre symbol), thereby
+validating that the value \(w\) is correct and <em>could</em> be decoded into
+a full point, but it is not necessary to actually decode it and retrieve
+the \(x\) coordinate, which is not needed for a \(w^2\)-only ladder.</p>
+<h1><a class="header" href="#curve-choices" id="curve-choices">Curve Choices</a></h1>
+<p>We define two specific sets of curve parameters for double-odd curves
+that leverage the formulas for good performance: do255e and do255s. The
+do255e curve is a GLV curve (with equation \(y^2 = x(x^2 + b)\)) which
+permits use of our doubling formulas with the lowest per-doubling cost
+(1M+5S). GLV curves feature some extra structure, namely a fast
+endomorphism on the curve that can be leveraged to considerably speed up
+point multiplication. Since this extra structure has historically
+generated unease about security (no weakness was found, but these curves
+are still admittedly &quot;special&quot; in a fuzzy way), we also define do255s,
+an ordinary curve with no such structure. do255s uses the equation
+\(y^2 = x(x^2 - x + 1/2)\), for which we have doubling formulas in
+cost 2M+4S.</p>
+<p>In both cases, the base field is chosen to be the field of integers
+modulo \(q = 2^{255} - m\) for a small integer \(m\); the value of
+\(m\) is the main selection parameter. Fastest known implementations
+on both 64-bit x86 CPUs and ARM Cortex M0+ CPUs use register-sized limbs
+and will provide the same performance for all values of \(m\), as long
+as \(m &lt; 2^{15}\). Moreover, there are some slight benefits, when
+doing modular reduction, to a 255-bit modulus (as opposed to a 256-bit
+modulus), because that allows an efficient partial reduction. Since the
+curve order is close to \(q\) and that order is \(2r\), where
+\(r\) is the order of the final group, we will obtain a group of size
+about \(2^{254}\), which is sufficient to claim &quot;128-bit security&quot; (in
+the same way that Curve25519 / Edwards25519 also claims the 128-bit
+security level with a subgroup prime order of about \(2^{252}\)).</p>
+<p>We thus choose the target values of \(a\) and \(b\) such that all
+constants in applicable formulas lead to fast operations, then explore
+increasing values of \(m\) until a match is found, i.e.
+\(q = 2^{255} - m\) is prime <em>and</em> the curve equation leads to order
+\(2r\) with \(r\) prime.</p>
+<p>Once the field is chosen, it only remains to define a conventional
+generator \(G\) for the group. Which point we use is not important for
+security (discrete logarithm relatively to one generator is equivalent
+to discrete logarithm relatively to any other generator). To make the
+selection deterministic, we use the point in the group \(\mathbb{G}\)
+with the lowest non-zero \(u\) coordinate, interpreted as an integer
+in the \(0...q-1\) range.</p>
+<p>Specific parameters are provided in the following sub-pages:</p>
+<ul>
+<li><a href="params-do255e.html">do255e</a></li>
+<li><a href="params-do255s.html">do255s</a></li>
+</ul>
+<h1><a class="header" href="#do255e" id="do255e">do255e</a></h1>
+<p>The curve do255e is a GLV curve, i.e. with equation \(y^2 = x(x^2 + b)\).
+We apply the following criteria:</p>
+<ul>
+<li>
+<p>Modulus \(q = 2^{255} - m\) should be equal to 5 modulo 8. For the
+GLV curve not to be supersingular, we need \(q\) to be equal to
+1 or 5 modulo 8; the second choice makes computation of square roots
+in the field easier to implement.</p>
+</li>
+<li>
+<p>Since the \(j\)-invariant of such a curve is fixed (it's 1728),
+there are only two potential curves (up to isomorphisms) to check
+for a given field. We can thus always enforce that \(b = 2\) or
+\(-2\), which are convenient values for implementation.</p>
+</li>
+<li>
+<p>Curve order must be equal to \(2r\) for a prime integer \(r\).</p>
+</li>
+</ul>
+<p>Under these criteria, the first match is for \(m = 18651\). Here are
+the resulting curve parameters:</p>
+<ul>
+<li><strong>Name:</strong> do255e</li>
+<li><strong>Field:</strong> integers modulo \(q = 2^{255} - 18651\)</li>
+<li><strong>Equation:</strong> \(y^2 = x(x^2 - 2)\)</li>
+<li><strong>Order:</strong> \(2r\), with \(r = 2^{254} - 131528281291764213006042413802501683931\)</li>
+<li><strong>Generator:</strong>
+\[\begin{eqnarray*}
+G_x &amp;=&amp; 2 \\
+G_y &amp;=&amp; 2
+\end{eqnarray*}\]</li>
+</ul>
+<h1><a class="header" href="#do255s" id="do255s">do255s</a></h1>
+<p>The curve do255s is an ordinary curve with no easily computable
+endomorphism. Its equation parameters are such that \(a\) is not a
+quadratic residue, and \(a^2 = 2b\), so that point doubling formulas
+in cost 2M+4S (in Jacobian \((x, w)\) coordinates) may be used. As
+exposed in the <a href="doubleodd.pdf">whitepaper</a>, this implies that the curve
+\(j\)-invariant is 128, and that there is only a single curve per
+field (up to isomorphisms) that matches these criteria, and we can thus
+enforce that \(a = -1\) and \(b = 1/2\).</p>
+<p>We apply the following criteria:</p>
+<ul>
+<li>
+<p>Curve equation is \(y^2 = x(x^2 - x + 1/2)\).</p>
+</li>
+<li>
+<p>Modulus \(q = 2^{255} - m\) should be equal to 3 modulo 8. This
+is needed for the curve with that equation to be a double-odd curve.</p>
+</li>
+<li>
+<p>Curve order must be equal to \(2r\) for a prime integer \(r\).</p>
+</li>
+</ul>
+<p>Under these criteria, the first match is for \(m = 3957\). Here are
+the resulting curve parameters:</p>
+<ul>
+<li><strong>Name:</strong> do255s</li>
+<li><strong>Field:</strong> integers modulo \(q = 2^{255} - 3957\)</li>
+<li><strong>Equation:</strong> \(y^2 = x(x^2 - x + 1/2)\)</li>
+<li><strong>Order:</strong> \(2r\), with \(r = 2^{254} + 56904135270672826811114353017034461895\)</li>
+<li><strong>Generator:</strong>
+\[\begin{eqnarray*}
+G_x &amp;=&amp; 26116555989003923291153849381583511726884321626891190016751861153053671511729 \\
+G_y &amp;=&amp; 28004200202554007000979780628642488551173104653237157345493551052336745442580
+\end{eqnarray*}\]</li>
+</ul>
+<h1><a class="header" href="#implementations" id="implementations">Implementations</a></h1>
+<p>The following open-source (MIT license) implementations of curves
+do255e and do255s are available:</p>
+<ul>
+<li>
+<p><strong>Reference implementation</strong> in Python:</p>
+<p><a href="https://github.com/doubleodd/py-do255">https://github.com/doubleodd/py-do255</a></p>
+<p>This implementation is only for reference purposes; it computes
+correct values, but does so in a sub-optimal way and, crucially,
+is not free of timing-based side channels, since it relies on
+Python's big integers.</p>
+<p>This repository includes comprehensive test vectors for curves
+do255e and do255s (both low-level operations such as point addition,
+and high-level functionalities: key exchange, signature,
+hash-to-curve). The script that generates these vectors leverages
+the Python implementation.</p>
+</li>
+<li>
+<p><strong>Go implementation</strong>:</p>
+<p><a href="https://github.com/doubleodd/go-do255">https://github.com/doubleodd/go-do255</a></p>
+<p>The Go implementation is considered correct and secure; all the code
+is strictly constant-time. It is pure Go code that should run on any
+supported Go platform. It internally uses 64-bit types with
+<code>math/bits</code> functionalities (especially <code>Add64()</code>, <code>Sub64()</code> and
+<code>Mul64()</code>) which provide decent performance in a portable way on
+64-bit platforms.</p>
+</li>
+<li>
+<p><strong>C and assembly implementations</strong>:</p>
+<p><a href="https://github.com/doubleodd/c-do255">https://github.com/doubleodd/c-do255</a></p>
+<p>This repository contains some extensive demonstration code in C and
+assembly:</p>
+<ul>
+<li>C code (with 64-bit intrinsics) for 64-bit x86</li>
+<li>C code with some inline assembly for 64-bit x86 with BMI2 and ADX
+opcodes (e.g. Intel Skylake and later cores)</li>
+<li>C code (with 32-bit intrinsics) for 32-bit x86</li>
+<li>Assembly code for ARM Cortex M0+</li>
+</ul>
+<p>While this implementation was written for research and demonstration
+purposes, it follows APIs and conventions appropriate for general
+inclusion in applications. All the code is strictly constant-time.
+This is the code that was used for the benchmarks reported in
+the <a href="doubleodd.pdf">whitepaper</a>.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

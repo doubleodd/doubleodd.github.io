@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Double-Odd Elliptic Curves - Double-Odd Elliptic Curves</title>
+        <title>Formulas - Double-Odd Elliptic Curves</title>
         
         
 
@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">5.</strong> Implementations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html" class="active"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">5.</strong> Implementations</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -166,92 +166,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#double-odd-elliptic-curves" id="double-odd-elliptic-curves">Double-Odd Elliptic Curves</a></h1>
-<p>Double-odd elliptic curves are a large subset of elliptic curves: these
-are curves whose order is equal to 2 modulo 4 (i.e. the order is the
-double of an odd integer). On top of double-odd elliptic curves, we can
-define a <strong>prime order group</strong> suitable for building cryptographic
-protocols. This is similar to what <a href="https://ristretto.group/">Ristretto</a>
-achieves for twisted Edwards curves, albeit with a different method.
-Some highlights of double-odd elliptic curves are:</p>
+                        <h1><a class="header" href="#formulas" id="formulas">Formulas</a></h1>
+<p>We can derive many formulas working in several coordinate systems.
+We give in the following pages formulas for:</p>
+<ul>
+<li><a href="formulas-xy.html">Affine \((x, y)\) coordinates</a></li>
+<li><a href="formulas-xw.html">Affine and Jacobian \((x, w)\) coordinates</a></li>
+<li><a href="formulas-xu.html">Affine and fractional \((x, u)\) coordinates</a></li>
+<li><a href="formulas-ladder.html">x-only point multiplication ladders</a></li>
+</ul>
+<p>Proofs for these formulas, as well as extra structures and other
+mathematical considerations, are explained at length in the
+<a href="doubleodd.pdf">whitepaper</a>.</p>
+<p>In all these formulas, the following apply:</p>
 <ul>
 <li>
-<p>There is no cofactor to deal with. A clean prime order group
-abstraction is provided, with a canonical encoding for elements
-which is automatically verified when decoding.</p>
+<p>The base curve \(E\) has equation \(y^2 = x(x^2 + ax + b)\).
+Group \(\mathbb{G}\) consists of the point of \(E\) which are
+not points of \(r\)-torsion.</p>
 </li>
 <li>
-<p>The encoding is economical: for \(n\)-bit security, group
-elements are encoded over \(2n+1\) bits (compared to \(2n+3\)
-for Ristretto).</p>
-</li>
-<li>
-<p>All group operations are supported by unified and complete formulas
-amenable to efficient and secure (constant-time) implementations.</p>
-</li>
-<li>
-<p>No drastically new cryptographic hypothesis is introduced.
-Double-odd elliptic curves are fairly mundane; about 1/4th of all
-elliptic curves are double-odd curves. Such curves are considered
-secure for cryptography, just like any other random elliptic curve
-with a large enough subgroup of prime order.</p>
-</li>
-<li>
-<p>The formulas are <em>fast</em> and provide performance at least on par with
-twisted Edwards curves. In some respects they are faster; e.g. point
-doublings can be performed, for half of double-odd curves, with six
-multiplications (down to 1M+5S for some specific curves).</p>
+<p>The neutral is \(N = (0, 0)\). The group law is called &quot;addition&quot;
+and denoted as such. Group \(\mathbb{G}\) is homomorphic to the
+subgroup of points of \(r\)-torsion \(E[r]\) and thus has the
+same resistance to discrete logarithm.</p>
 </li>
 </ul>
-<p>In order to leverage these techniques, two specific double-odd elliptic
-curves are defined: do255e and do255s. Both provide &quot;128-bit security&quot;
-(technically, 127 bits); do255e is a GLV curve that can leverage an
-internal endomorphism for further improved performance, while do255s is
-a perfectly ordinary curve.</p>
-<h2><a class="header" href="#resources" id="resources">Resources</a></h2>
-<p>The <a href="doubleodd.pdf">whitepaper</a> contains all the formulas and
-demonstrations; it also specifies the use of do255e and do255s in
-higher-level cryptographic functionalities (key pair generation, key
-exchange, signature, and hash-to-curve). Most of the present site
-consists in extracts from this whitepaper.</p>
-<p>Several implementations of do255e and do255s exist and are listed
-in the <a href="implementations.html">implementations section</a>.</p>
-<h2><a class="header" href="#outline" id="outline">Outline</a></h2>
-<p>Subsequent pages in this site include the following:</p>
-<ul>
-<li>
-<p><a href="intro.html">A geometrical introduction to double-odd elliptic curves</a>:
-a self-contained explanatory text (with pictures)
-to explain the motivation and the core ideas of this work.</p>
-</li>
-<li>
-<p>The <a href="formulas.html">formulas section</a> lists useful formulas for
-computing over points of double-odd elliptic curves with several
-convenient systems of coordinates.</p>
-</li>
-<li>
-<p>Explicit <a href="curves.html">curve choices</a> are listed: these are curves
-do255e and do255s. Selection criteria and curve parameters are
-provided.</p>
-</li>
-<li>
-<p>Available <a href="implementations.html">open-source implementations</a> are
-listed.</p>
-</li>
-</ul>
-<h2><a class="header" href="#about" id="about">About</a></h2>
-<p>Double-odd elliptic curves were designed by Thomas Pornin, who also
-wrote this Web site, with contributions from Paul Bottinelli, Gérald
-Doussot and Eric Schorn.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="formulas-xy.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -263,9 +216,13 @@ Doussot and Eric Schorn.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a rel="prev" href="intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a rel="next" href="intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="formulas-xy.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
