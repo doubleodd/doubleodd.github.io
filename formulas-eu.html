@@ -1,0 +1,378 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Affine and extended (e, u) Coordinates - Double-Odd Elliptic Curves</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="jacobi.html"><strong aria-hidden="true">3.</strong> Double-Odd to Jacobi Quartics</a></li><li class="chapter-item expanded "><a href="shortsig.html"><strong aria-hidden="true">4.</strong> Short Signatures</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">5.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">5.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">5.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">5.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">5.4.</strong> x-only Ladders</a></li><li class="chapter-item expanded "><a href="formulas-eu.html" class="active"><strong aria-hidden="true">5.5.</strong> Affine and extended (e, u) Coordinates</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">6.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">6.1.</strong> do255e / jq255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">6.2.</strong> do255s / jq255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">7.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">8.</strong> Implementations</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Double-Odd Elliptic Curves</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#affine-and-extended-e-u-coordinates" id="affine-and-extended-e-u-coordinates">Affine and Extended (e, u) Coordinates</a></h1>
+<p>As described in the <a href="jacobi.html">Double-Odd Curves as Jacobi Quartics</a>
+section, double-odd curves can be turned into Jacobi quartics with
+the following change of variables:
+\[\begin{eqnarray*}
+u &amp;=&amp; \frac{x}{y} \\
+e &amp;=&amp; u^2 \left(x - \frac{b}{x}\right)
+\end{eqnarray*}\]</p>
+<p>In this coordinate system, the curve equation is
+\(e^2 = (a^2-4b)u^4 - 2au^2 + 1\). The point of order two is
+\(N = (-1,0)\), while the point &quot;at infinity&quot; has definite coordinates
+\(\mathbb{O} = (1,0)\). Several formulas are known for such curves.</p>
+<h2><a class="header" href="#affine-coordinates" id="affine-coordinates">Affine Coordinates</a></h2>
+<p>Given \(P_1 = (e_1, u_1)\) and \(P_2 = (e_2, u_2)\), their sum
+\(P_3 = (e_3, u_3)\) can be computed with the following formulas:
+\[\begin{eqnarray*}
+e_3 &amp;=&amp; \frac{(1 + (a^2-4b) u_1^2 u_2^2)(e_1 e_2 - 2a u_1 u_2)
++ 2(a^2-4b) u_1 u_2 (u_1^2 + u_2^2)}
+{(1 - (a^2-4b) u_1^2 u_2^2)^2} \\
+u_3 &amp;=&amp; \frac{u_1 e2 + u_2 e_1}{1 - (a^2-4b) u_1^2 u_2^2}
+\end{eqnarray*}\]</p>
+<p>These formulas are <strong>complete</strong> (they are complete for Jacobi quartics
+with a single point of order 2, a category that includes all double-odd
+curves).</p>
+<h2><a class="header" href="#decoding-and-encoding" id="decoding-and-encoding">Decoding and Encoding</a></h2>
+<p>The encoding format for double-odd Jacobi quartic curves requires the
+definition of a <em>sign convention</em>, which is a function \(S\) over
+field elements, such that:</p>
+<ul>
+<li>For all field elements \(x\), \(S(x) = 0\) or \(1\).</li>
+<li>\(S(0) = 0\).</li>
+<li>For any \(x \neq 0\), \(S(-x) = 1 - S(x)\).</li>
+</ul>
+<p>Elements \(x\) for which \(S(x) = 1\) are said to be <em>negative</em>; the
+other elements are called <em>non-negative</em>. For our fields of interest
+(integers modulo a prime integer \(q\)), we use the least significant
+bit of the integer representation of the field element (in the \(0\)
+to \(q-1\) range).</p>
+<p>The <strong>encoding process</strong> of point \((e,u)\) is then the following:</p>
+<ul>
+<li>If \(e\) is non-negative, encode \(u\) as bytes.</li>
+<li>Otherwise, encode \(-u\) as bytes.</li>
+</ul>
+<p>The <strong>decoding process</strong> works as follows:</p>
+<ul>
+<li>Decode the input bytes as the \(u\) coordinate.</li>
+<li>Compute \(e^2 = (a^2-4b)u^4 - 2au^2 + 1\).</li>
+<li>Extract \(e\) as a square root of \(e^2\). If the encoding is valid,
+then there will be two square roots, exactly one of which being
+non-negative: choose that specific root as \(e\).</li>
+</ul>
+<p>The encoding/decoding process does <em>not</em> need any special treatment for
+any group element, including the neutral.</p>
+<h2><a class="header" href="#extended-coordinates" id="extended-coordinates">Extended Coordinates</a></h2>
+<p>Extended coordinates represent a point \((e,u)\) as a quadruplet
+\((E{:}Z{:}U{:}T)\) such that \(Z\neq 0\), \(e = E/Z\), \(u = U/Z\)
+and \(u^2 = T/Z\) (this implies that \(U^2 = TZ\)).</p>
+<p>The addition of \(P_1 = (E_1{:}Z_1{:}U_1{:}T_1)\) with \(P_2 =
+(E_2{:}Z_2{:}U_2{:}T_2)\) into \(P_3 = (E_3{:}Z_3{:}U_3{:}T_3)\) is
+obtained with the following addition formulas:
+\[\begin{eqnarray*}
+E_3 &amp;=&amp; (Z_1 Z_2 + (a^2-4b) T_1 T_2)(E_1 E_2 - 2a U_1 U_2) + 2(a^2-4b) U_1 U_2 (T_1 Z_2 + T_2 Z_1) \\
+Z_3 &amp;=&amp; (Z_1 Z_2 - (a^2-4b) T_1 T_2)^2 \\
+U_3 &amp;=&amp; (E_1 U_2 + E_2 U_1)(Z_1 Z_2 - (a^2-4b) T_1 T_2) \\
+T_3 &amp;=&amp; (E_1 U_2 + E_2 U_1)^2
+\end{eqnarray*}\]
+Like their affine counterparts, these formulas are complete.</p>
+<p>They can be implemented in cost 8M+3S by using the following algorithm:</p>
+<ol>
+<li>\(n_1 \leftarrow E_1 E_2\)</li>
+<li>\(n_2 \leftarrow Z_1 Z_2\)</li>
+<li>\(n_3 \leftarrow U_1 U_2\)</li>
+<li>\(n_4 \leftarrow T_1 T_2\)</li>
+<li>\(n_5 \leftarrow (Z_1 + T_1)(Z_2 + T_2) - n_2 - n_4\)</li>
+<li>\(n_6 \leftarrow (E_1 + U_1)(E_2 + U_2) - n_1 - n_3\)</li>
+<li>\(n_7 \leftarrow n_2 - (a^2-4b) n_4\)</li>
+<li>\(E_3 \leftarrow (n_2 + (a^2-4b) n_4)(n_1 - 2a n_3) + 2(a^2-4b) n_3 n_5\)</li>
+<li>\(Z_3 \leftarrow n_7^2\)</li>
+<li>\(T_3 \leftarrow n_6^2\)</li>
+<li>\(Z_3 \leftarrow ((n_6 + n_7)^2 - n_6 - n_7)/2\)</li>
+</ol>
+<p>The cost of 8M+3S assumes that multiplication by constants \(2a\) and
+\(a^2-4b\) is inexpensive. i.e. that these are all small integers or
+easily computed fractions such as \(1/2\).</p>
+<p>While the general addition formulas work also for point doublings
+(with cost 2M+9S), we can do better. The following formulas compute
+the double of a point, yielding the result in Jacobian \((x,w)\)
+coordinates (they also work with \(N\) and \(\mathbb{O}\), even
+though in general \((x,w)\) coordinates do not support these points):
+\[\begin{eqnarray*}
+X' &amp;=&amp; E^4 \\
+W' &amp;=&amp; 2Z^2 - 2aU^2 - E^2 \\
+&amp;=&amp; Z^2 - (a^2-4b) T^2 \\
+&amp;=&amp; E^2 + 2aU^2 - 2(a^2-4b) T^2 \\
+J' &amp;=&amp; 2EU
+\end{eqnarray*}\]
+(There are three possible choices to compute \(W'\)). This operation
+can be done in cost 2M+2S, or 1M+3S when the field is such that
+\(q = 3 \bmod 4\) (because, in that case, \(4b-a^2\) is a square
+and we can use its square root to transform a multiplication into
+a squaring). The result is in Jacobian \((x,w)\) coordinates, and
+must be transformed back into extended \((e,u)\) coordinates, with:
+\[\begin{eqnarray*}
+Z' &amp;=&amp; W'^2 \\
+T' &amp;=&amp; J'^2 \\
+U' &amp;=&amp; J'W' \\
+E' &amp;=&amp; 2X' - Z' + aT'
+\end{eqnarray*}\]
+which can be computed with cost 3S.</p>
+<p>By combining these two operations, we get point doublings in cost
+2M+5S, or 1M+6S when the field is such that \(q = 3 \bmod 4\).</p>
+<p>Since we have the choice of representant for each group element, we
+can compute \(2P+N\) instead of \(2P\); in that case, the formulas
+for the doubling to \((x,w)\) Jacobian coordinates are as follows:
+\[\begin{eqnarray*}
+X' &amp;=&amp; 16b U^4 \\
+&amp;=&amp; 16b (TZ)^2 &amp; &amp; \\
+W' &amp;=&amp; E^2 + 2aU^2 - 2Z^2 \\
+&amp;=&amp; (a^2-4b) T^2 - Z^2 \\
+&amp;=&amp; 2(a^2-4b) T^2 - E^2 - 2aU^2 \\
+J' &amp;=&amp; 2EU
+\end{eqnarray*}\]
+We again get several choices, both for \(X'\) and for \(W'\). These
+formulas are convenient for the case of curves with \(a = 0\)
+(such as jq255e), because they allow a cost of 1M+3S (for a total of
+1M+6S for the complete doubling) even if the field is such that
+\(q = 1 \bmod 4\).</p>
+<p>Since we transiently use Jacobian \((x,w)\) coordinates, we can insert
+extra doublings using that coordinate system, before the conversion back
+to extended \((e,u)\) coordinates. That way, we can leverage the same
+asymptotic cost for long sequences of point doublings as in the
+\((x,u)\) coordinates, with a lower overhead when starting the
+sequence:</p>
+<ul>
+<li>\(n\)(2M+5S) (for all curves)</li>
+<li>\(n\)(1M+6S) (if \(q = 3\bmod 4\))</li>
+<li>\(n\)(1M+5S)+1S (if \(a = 0\))</li>
+<li>\(n\)(2M+4S)+2S-1M (if \(a = -1\) and \(b = 1/2\))</li>
+</ul>
+<p>Please refer to <a href="doubleodd-jq.pdf">the additional whitepaper</a> (sections
+6.5 to 6.7) for additional details on these formulas.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="formulas-ladder.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="curves.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="formulas-ladder.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="curves.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

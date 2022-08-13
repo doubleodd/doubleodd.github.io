@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html" class="active"><strong aria-hidden="true">6.</strong> Implementations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="jacobi.html"><strong aria-hidden="true">3.</strong> Double-Odd to Jacobi Quartics</a></li><li class="chapter-item expanded "><a href="shortsig.html"><strong aria-hidden="true">4.</strong> Short Signatures</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">5.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">5.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">5.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">5.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">5.4.</strong> x-only Ladders</a></li><li class="chapter-item expanded "><a href="formulas-eu.html"><strong aria-hidden="true">5.5.</strong> Affine and extended (e, u) Coordinates</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">6.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">6.1.</strong> do255e / jq255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">6.2.</strong> do255s / jq255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">7.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html" class="active"><strong aria-hidden="true">8.</strong> Implementations</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -167,6 +167,53 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#implementations" id="implementations">Implementations</a></h1>
+<h2><a class="header" href="#jq255e-and-jq255s" id="jq255e-and-jq255s">jq255e and jq255s</a></h2>
+<p>The following open-source implementations of jq255e and jq255s are
+available:</p>
+<ul>
+<li>
+<p><strong>Reference implementation</strong> in Python:</p>
+<p><a href="https://github.com/doubleodd/py-jq255">https://github.com/doubleodd/py-jq255</a></p>
+<p>This implementation is only for reference purposes; it computes
+correct values, but does so in a sub-optimal way and, crucially,
+is not free of timing-based side channels, since it relies on
+Python's big integers.</p>
+<p>This repository includes comprehensive test vectors for curves
+do255e and do255s (both low-level operations such as point addition,
+and high-level functionalities: key exchange, signature,
+hash-to-curve). The script that generates these vectors leverages
+the Python implementation.</p>
+</li>
+<li>
+<p><strong>Rust implementation</strong>:</p>
+<p>Jq255e and jq255s are implemented by the crrl library, in the
+<code>jq255e</code> and <code>jq255s</code> modules, respectively:</p>
+<p><a href="https://github.com/pornin/crrl">https://github.com/pornin/crrl</a></p>
+<p>The code includes a 32-bit and a 64-bit backends. No assembly is
+used. On x86 systems, intrisic functions are used for additions and
+subtractions with carry propagation, but the code also works on
+non-x86 targets. This is the implementation of jq255e and jq255s
+that currently offers the best performance. It is fully constant-time
+for all secret data.</p>
+</li>
+<li>
+<p><strong>C implementation</strong>:</p>
+<p>A stand-alone C implementation of jq255e and jq255s is provided in:</p>
+<p><a href="https://github.com/doubleodd/c-jq255">https://github.com/doubleodd/c-jq255</a></p>
+<p>The C code provides the high-level operations (keygen, sign, verify,
+ECDH key exchange) but does not export generic group operations in
+its API. This code is meant for easy integration in applications,
+with a limited number of source code files, no external dependency,
+and no dynamic memory allocation. All the code is constant-time for
+all secret data. Its performance is close to that of the Rust crrl
+implementation.</p>
+</li>
+</ul>
+<h2><a class="header" href="#do255e-and-do255s" id="do255e-and-do255s">do255e and do255s</a></h2>
+<p>We list here the original implementations of do255e and do255s. Generally
+speaking, jq255e and jq255s are now preferred, since they offer better
+performance. These older implementations will be converted to jq255e and
+jq255s in the future.</p>
 <p>The following open-source (MIT license) implementations of curves
 do255e and do255s are available:</p>
 <ul>

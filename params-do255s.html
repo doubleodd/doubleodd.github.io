@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>do255s - Double-Odd Elliptic Curves</title>
+        <title>do255s / jq255s - Double-Odd Elliptic Curves</title>
         
         
 
@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html" class="active"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">6.</strong> Implementations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="jacobi.html"><strong aria-hidden="true">3.</strong> Double-Odd to Jacobi Quartics</a></li><li class="chapter-item expanded "><a href="shortsig.html"><strong aria-hidden="true">4.</strong> Short Signatures</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">5.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">5.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">5.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">5.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">5.4.</strong> x-only Ladders</a></li><li class="chapter-item expanded "><a href="formulas-eu.html"><strong aria-hidden="true">5.5.</strong> Affine and extended (e, u) Coordinates</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">6.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">6.1.</strong> do255e / jq255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html" class="active"><strong aria-hidden="true">6.2.</strong> do255s / jq255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">7.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">8.</strong> Implementations</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -166,7 +166,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#do255s" id="do255s">do255s</a></h1>
+                        <h1><a class="header" href="#do255s--jq255s" id="do255s--jq255s">do255s / jq255s</a></h1>
 <p>The curve do255s is an ordinary curve with no easily computable
 endomorphism. Its equation parameters are such that \(a\) is not a
 quadratic residue, and \(a^2 = 2b\), so that point doubling formulas
@@ -174,7 +174,8 @@ in cost 2M+4S (in Jacobian \((x, w)\) coordinates) may be used. As
 exposed in the <a href="doubleodd.pdf">whitepaper</a>, this implies that the curve
 \(j\)-invariant is 128, and that there is only a single curve per
 field (up to isomorphisms) that matches these criteria, and we can thus
-enforce that \(a = -1\) and \(b = 1/2\).</p>
+enforce that \(a = -1\) and \(b = 1/2\). The corresponding Jacobi
+quartic, called jq255s, then has equation \(e^2 = -u^4 + 2u^2 + 1\).</p>
 <p>We apply the following criteria:</p>
 <ul>
 <li>
@@ -191,14 +192,16 @@ is needed for the curve with that equation to be a double-odd curve.</p>
 <p>Under these criteria, the first match is for \(m = 3957\). Here are
 the resulting curve parameters:</p>
 <ul>
-<li><strong>Name:</strong> do255s</li>
+<li><strong>Name:</strong> do255s / jq255s</li>
 <li><strong>Field:</strong> integers modulo \(q = 2^{255} - 3957\)</li>
-<li><strong>Equation:</strong> \(y^2 = x(x^2 - x + 1/2)\)</li>
+<li><strong>Equations:</strong> \(y^2 = x(x^2 - x + 1/2)\) and \(e^2 = -u^4 + 2u^2 + 1\)</li>
 <li><strong>Order:</strong> \(2r\), with \(r = 2^{254} + 56904135270672826811114353017034461895\)</li>
 <li><strong>Generator:</strong>
 \[\begin{eqnarray*}
 G_x &amp;=&amp; 26116555989003923291153849381583511726884321626891190016751861153053671511729 \\
-G_y &amp;=&amp; 28004200202554007000979780628642488551173104653237157345493551052336745442580
+G_y &amp;=&amp; 28004200202554007000979780628642488551173104653237157345493551052336745442580 \\
+G_e &amp;=&amp; 6929650852805837546485348833751579670837850621479164143703164723313568683024 \\
+G_u &amp;=&amp; 3
 \end{eqnarray*}\]</li>
 </ul>
 

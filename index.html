@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">6.</strong> Implementations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="jacobi.html"><strong aria-hidden="true">3.</strong> Double-Odd to Jacobi Quartics</a></li><li class="chapter-item expanded "><a href="shortsig.html"><strong aria-hidden="true">4.</strong> Short Signatures</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">5.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">5.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">5.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">5.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">5.4.</strong> x-only Ladders</a></li><li class="chapter-item expanded "><a href="formulas-eu.html"><strong aria-hidden="true">5.5.</strong> Affine and extended (e, u) Coordinates</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">6.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">6.1.</strong> do255e / jq255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">6.2.</strong> do255s / jq255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html"><strong aria-hidden="true">7.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">8.</strong> Implementations</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -204,19 +204,36 @@ multiplications (down to 1M+5S for some specific curves).</p>
 </li>
 </ul>
 <p>In order to leverage these techniques, two specific double-odd elliptic
-curves are defined: do255e and do255s. Both provide &quot;128-bit security&quot;
-(technically, 127 bits); do255e is a GLV curve that can leverage an
-internal endomorphism for further improved performance, while do255s is
-a perfectly ordinary curve.</p>
+curves, on which we define the prime-order groups jq255e and jq255s (the
+original version of this work defined the do255e and do255s; the &quot;jq&quot;
+groups are algebraically identical, but use a different encoding
+process). Both provide &quot;128-bit security&quot; (technically, 127 bits);
+jq255e is a GLV curve that can leverage an internal endomorphism for
+further improved performance, while jq255s is a perfectly ordinary
+curve.</p>
+<p>(<strong>New: 2022-08-13</strong>) The original do255e and do255s have been
+reinterpreted into a subcase of Jacobi quartics, from which we obtain
+the new groups jq255e and jq255s (same groups as previously but a
+different encoding format). They have <strong>faster formulas</strong> and in
+particular a better encoding and decoding (as efficient as plain Ed25519
+point compression). On top of jq255e and jq255s, we define <strong>short
+signatures</strong> of length 48 bytes, noticeably shorter than the usual
+64-byte signatures of Ed25519 or P-256/ECDSA; this also makes signature
+verification faster, down to about 93000 cycles on a 64-bit x86 system
+(Coffee Lake core).</p>
 <h2><a class="header" href="#resources" id="resources">Resources</a></h2>
-<p>The <a href="doubleodd.pdf">whitepaper</a> contains all the formulas and
+<p>The <a href="doubleodd.pdf">original whitepaper</a> contains all the formulas and
 demonstrations; it also specifies the use of do255e and do255s in
 higher-level cryptographic functionalities (key pair generation, key
-exchange, signature, and hash-to-curve). Most of the present site
-consists in extracts from this whitepaper. <strong>Note:</strong> the whitepaper
-is now also <a href="https://eprint.iacr.org/2020/1558">published on ePrint</a>.</p>
-<p>Several implementations of do255e and do255s exist and are listed
-in the <a href="implementations.html">implementations section</a>.</p>
+exchange, signature, and hash-to-curve). The <a href="doubleodd-jq.pdf">additional
+whitepaper</a> presents the reinterpretation of
+double-odd curves as Jacobi quartics, leading to the jq255e and jq255s
+groups, and new specifications of the higher-level crpytographic
+schemes, in particular <em>short signatures</em>.</p>
+<p><strong>Note:</strong> the original whitepaper is also <a href="https://eprint.iacr.org/2020/1558">published on
+ePrint</a>.</p>
+<p>Several implementations of jq255e, jq255s, do255e and do255s exist and
+are listed in the <a href="implementations.html">implementations section</a>.</p>
 <h2><a class="header" href="#outline" id="outline">Outline</a></h2>
 <p>Subsequent pages in this site include the following:</p>
 <ul>
@@ -226,14 +243,27 @@ a self-contained explanatory text (with pictures)
 to explain the motivation and the core ideas of this work.</p>
 </li>
 <li>
+<p>(<strong>New: 2022-08-13</strong>) <a href="jacobi.html">Double-odd Jacobi quartics</a> presents
+the reinterpretation of double-odd curves as a special case of
+Jacobi quartics, which leads to faster formulas and an improved
+decoding process.</p>
+</li>
+<li>
+<p>(<strong>New: 2022-08-13</strong>) The <a href="shortsig.html">short signatures</a> describes
+the signature scheme specified on the jq255e and jq255s groups, i.e.
+the double-odd curves interpreted as Jacobi quartics. This scheme
+makes signature substantially shorter (48 bytes instead of 64), and
+also speeds up signature verification.</p>
+</li>
+<li>
 <p>The <a href="formulas.html">formulas section</a> lists useful formulas for
 computing over points of double-odd elliptic curves with several
 convenient systems of coordinates.</p>
 </li>
 <li>
 <p>Explicit <a href="curves.html">curve choices</a> are listed: these are curves
-do255e and do255s. Selection criteria and curve parameters are
-provided.</p>
+do255e/jq255e and do255s/jq255s. Selection criteria and curve
+parameters are provided.</p>
 </li>
 <li>
 <p>Some <a href="benchmarks.html">benchmarks</a> on large (x86) and small (ARM

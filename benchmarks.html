@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">3.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">3.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">3.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">3.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">3.4.</strong> x-only Ladders</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">4.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">4.1.</strong> do255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">4.2.</strong> do255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html" class="active"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">6.</strong> Implementations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">1.</strong> Double-Odd Elliptic Curves</a></li><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">2.</strong> A Geometrical Introduction</a></li><li class="chapter-item expanded "><a href="jacobi.html"><strong aria-hidden="true">3.</strong> Double-Odd to Jacobi Quartics</a></li><li class="chapter-item expanded "><a href="shortsig.html"><strong aria-hidden="true">4.</strong> Short Signatures</a></li><li class="chapter-item expanded "><a href="formulas.html"><strong aria-hidden="true">5.</strong> Formulas</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="formulas-xy.html"><strong aria-hidden="true">5.1.</strong> Affine (x, y) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xw.html"><strong aria-hidden="true">5.2.</strong> Affine and Jacobian (x, w) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-xu.html"><strong aria-hidden="true">5.3.</strong> Affine and fractional (x, u) Coordinates</a></li><li class="chapter-item expanded "><a href="formulas-ladder.html"><strong aria-hidden="true">5.4.</strong> x-only Ladders</a></li><li class="chapter-item expanded "><a href="formulas-eu.html"><strong aria-hidden="true">5.5.</strong> Affine and extended (e, u) Coordinates</a></li></ol></li><li class="chapter-item expanded "><a href="curves.html"><strong aria-hidden="true">6.</strong> Curve Choices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="params-do255e.html"><strong aria-hidden="true">6.1.</strong> do255e / jq255e</a></li><li class="chapter-item expanded "><a href="params-do255s.html"><strong aria-hidden="true">6.2.</strong> do255s / jq255s</a></li></ol></li><li class="chapter-item expanded "><a href="benchmarks.html" class="active"><strong aria-hidden="true">7.</strong> Benchmarks</a></li><li class="chapter-item expanded "><a href="implementations.html"><strong aria-hidden="true">8.</strong> Implementations</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -167,19 +167,94 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#benchmarks" id="benchmarks">Benchmarks</a></h1>
-<p>We list here some speed benchmarks of do255e and do255s curves,
-implemented in C (with assembly) on x86 (Coffee Lake), ARM Cortex M0+
-and ARM Cortex M4 systems. These implementations are published on:
+<p>We list here some speed benchmarks of double-odd curves.</p>
+<h2><a class="header" href="#double-odd-jacobi-quartics" id="double-odd-jacobi-quartics">Double-Odd Jacobi Quartics</a></h2>
+<p>The main implementation for jq255e and jq255s are in Rust, as part of
+the <a href="https://github.com/pornin/crrl">crrl library</a>; since that library
+also implements Ed25519, this allows comparing the relative performance
+of the curves. On an Intel x86 i5-8259U (Coffee Lake core), with Rust
+1.59.0, compiled with the &quot;<code>-C target-cpu=native</code>&quot; flags, the following
+values are obtained (in clock cycles):</p>
+<table><thead><tr><th align="left">Operation</th><th align="right">jq255e</th><th align="right">jq255s</th><th align="right">Ed25519</th></tr></thead><tbody>
+<tr><td align="left">Decode point</td><td align="right">9371</td><td align="right">9295</td><td align="right">9491</td></tr>
+<tr><td align="left">Encode point</td><td align="right">7847</td><td align="right">7874</td><td align="right">7864</td></tr>
+<tr><td align="left">Point mul</td><td align="right">72080</td><td align="right">107875</td><td align="right">107730</td></tr>
+<tr><td align="left">Point mulgen</td><td align="right">43570</td><td align="right">44915</td><td align="right">40456</td></tr>
+<tr><td align="left">Sign</td><td align="right">54738</td><td align="right">56160</td><td align="right">51581</td></tr>
+<tr><td align="left">Verify</td><td align="right">82839</td><td align="right">86837</td><td align="right">113983</td></tr>
+</tbody></table>
+<p>These are the measured operations:</p>
+<ul>
+<li>
+<p><em>Decode point</em>: read 32 bytes, and decode these into a curve point.
+This includes validation that the point is correctly on the curve.
+Main operation is a square root computation (a merged square root and
+inversion for Ed25519).</p>
+</li>
+<li>
+<p><em>Encode point</em>: encode a point into 32 bytes. The point is the
+output of some computations, i.e. not necessarily in already
+normalized affine coordinates. Main operation is an inversion
+in the field. Note: for Ristretto255, this operation is somewhat
+more expensive, at about 9800 cycles.</p>
+</li>
+<li>
+<p><em>Point mul</em>: multiply a point by a given scalar. An ECDH key
+exchange will primarily use this operation, as well as a point
+decode (on the peer's public key) and a point encode (on the
+resulting shared secret point).</p>
+</li>
+<li>
+<p><em>Point mulgen</em>: multiply the conventional generator (base point) by
+a scalar. In all three curves, the implementation uses four
+precomputed tables, each containing 16 points in extended affine
+coordinates, for a total of 6144 bytes. Some minor speed-ups could
+be achieved with more or larger tables.</p>
+</li>
+<li>
+<p><em>Sign</em>: sign some data. This assumes that the signer's private key
+has already been loaded in RAM, along with the encoding of the
+signer's public key (if not stored along, then the public key can
+be recomputed from the private key, at the cost of one mulgen
+and one encode operations).</p>
+</li>
+<li>
+<p><em>Verify</em>: verify a signature. This assumes that the signer's public
+key has already been decoded into a point; add the cost of a point
+decode operation to get the total verification cost using a
+32-byte-encoded public key.</p>
+</li>
+</ul>
+<p>All these operations are implemented in pure constant-time code, except
+signature verification, which is assumed to operate only on public data.</p>
+<p><strong>Commentary:</strong> we see that double-odd curve are on par with Ed25519 for
+most operations (Ristretto offers the same performance as Ed25519,
+except for point encoding, which is slightly slower since it involves a
+square root operation). Ed25519 is slightly better for operations that
+use mostly general point additions, while jq255e and jq255s are slightly
+faster for point doublings. Jq255e, specifically, benefits from the
+GLV endomorphism for computing general point multiplications by a scalar.
+Signature verification on jq255e and jq255s is quite faster than on
+Ed25519 thanks to the use of <a href="shortsig.html">short signatures</a>.</p>
+<h2><a class="header" href="#original-double-odd-curves-benchmarks" id="original-double-odd-curves-benchmarks">Original Double-Odd Curves Benchmarks</a></h2>
+<p>The <a href="whitepaper.pdf">original whitepaper</a> defined the do255e and do255s
+groups, which were implemented in C (with assembly) on x86 (Coffee
+Lake), ARM Cortex M0+ and ARM Cortex M4 systems. These implementations
+are published on:
 <a href="https://github.com/doubleodd/c-do255">https://github.com/doubleodd/c-do255</a></p>
-<p>All values are expressed in clock cycles on their respective platforms.</p>
-<h2><a class="header" href="#results" id="results">Results</a></h2>
+<p>All values are expressed in clock cycles on their respective platforms.
+Take care that the described operations are slightly distinct from the
+one uised above; in particular, the &quot;verify (with pubdec)&quot; operation
+combines the decoding of the public key and the actual signature
+verification.</p>
+<h3><a class="header" href="#results" id="results">Results</a></h3>
 <p>For <strong>do255e</strong>, the following timings are obtained (X25519 values listed
 for reference):</p>
 <table><thead><tr><th align="left">Operation</th><th align="right">x86 (64-bit)</th><th align="right">ARM Cortex M0+</th><th align="right">ARM Cortex M4</th></tr></thead><tbody>
 <tr><td align="left">keygen</td><td align="right">47974</td><td align="right">1422257</td><td align="right">270235</td></tr>
 <tr><td align="left">key exchange</td><td align="right">100834</td><td align="right">2616600</td><td align="right">492927</td></tr>
 <tr><td align="left">sign</td><td align="right">52324</td><td align="right">1502127</td><td align="right">316991</td></tr>
-<tr><td align="left">verify (avg)</td><td align="right">110226</td><td align="right">3255070</td><td align="right">558732</td></tr>
+<tr><td align="left">verify (with pubdec)</td><td align="right">110226</td><td align="right">3255070</td><td align="right">558732</td></tr>
 <tr><td align="left">mul</td><td align="right">75296</td><td align="right">2192130</td><td align="right">385869</td></tr>
 <tr><td align="left">mulgen</td><td align="right">41110</td><td align="right">1363789</td><td align="right">243046</td></tr>
 <tr><td align="left">X25519</td><td align="right">95437</td><td align="right">3229983</td><td align="right">563310</td></tr>
@@ -190,7 +265,7 @@ does not, yielding somewhat larger costs:</p>
 <tr><td align="left">keygen</td><td align="right">52272</td><td align="right">1572978</td><td align="right">298080</td></tr>
 <tr><td align="left">key exchange</td><td align="right">141992</td><td align="right">3591395</td><td align="right">654557</td></tr>
 <tr><td align="left">sign</td><td align="right">56806</td><td align="right">1653043</td><td align="right">344930</td></tr>
-<tr><td align="left">verify (avg)</td><td align="right">158780</td><td align="right">3746889</td><td align="right">700994</td></tr>
+<tr><td align="left">verify (with pubdec)</td><td align="right">158780</td><td align="right">3746889</td><td align="right">700994</td></tr>
 <tr><td align="left">mul</td><td align="right">116702</td><td align="right">3173254</td><td align="right">548706</td></tr>
 <tr><td align="left">mulgen</td><td align="right">45456</td><td align="right">1514461</td><td align="right">270870</td></tr>
 <tr><td align="left">X25519</td><td align="right">95437</td><td align="right">3229983</td><td align="right">563310</td></tr>
@@ -203,7 +278,7 @@ M4), curve do255e consistently outperforms X25519, while at the same
 time being more versatile since it inherently supports the usual panoply
 of group-related functionalities (Diffie-Hellman key exchange, Schnorr
 signatures).</p>
-<h2><a class="header" href="#operations" id="operations">Operations</a></h2>
+<h3><a class="header" href="#operations" id="operations">Operations</a></h3>
 <p>The measured operations are the following:</p>
 <ul>
 <li>
